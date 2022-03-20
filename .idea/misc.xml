@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/CS5520/AlphaObserver/app/src/main/res/drawable/fade_purple.xml" value="0.327" />
+        <entry key="..\:/CS5520/AlphaObserver/app/src/main/res/drawable/ic_launcher_background.xml" value="0.327" />
+        <entry key="..\:/CS5520/AlphaObserver/app/src/main/res/layout/activity_company_info.xml" value="0.4510474561778538" />
+        <entry key="..\:/CS5520/AlphaObserver/app/src/main/res/layout/activity_info_description.xml" value="0.4510474561778538" />
+        <entry key="..\:/CS5520/AlphaObserver/app/src/main/res/layout/activity_main.xml" value="0.20925925925925926" />
+        <entry key="..\:/CS5520/AlphaObserver/app/src/main/res/layout/company_info.xml" value="0.35764705882352943" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

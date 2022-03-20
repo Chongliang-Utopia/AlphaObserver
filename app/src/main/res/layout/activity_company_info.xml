@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".companyInfo.companyInfoActivity">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="136dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_CIK"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/fade_purple"/>
+
+    <TextView
+        android:id="@+id/companyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="I B M"
+        android:textAllCaps="true"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="2022"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.859"
+        app:layout_constraintStart_toEndOf="@+id/companyName"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/yearRevenueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="current year revenue"
+        android:textAllCaps="true"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/companyName"
+        app:layout_constraintTop_toBottomOf="@+id/companyName"
+         />
+
+    <TextView
+        android:id="@+id/yearRevenue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="$10345,00"
+        android:textAllCaps="true"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/companyName"
+        app:layout_constraintTop_toBottomOf="@+id/yearRevenueText" />
+
+    <TextView
+        android:id="@+id/text_CIK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="CIK"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yearRevenue" />
+
+    <TextView
+        android:id="@+id/response_CIK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/text_CIK"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/text_CIK" />
+
+    <TextView
+        android:id="@+id/text_Currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="28dp"
+        android:text="Currency"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="13sp"
+        app:layout_constraintStart_toEndOf="@id/text_CIK"
+        app:layout_constraintTop_toBottomOf="@+id/yearRevenue" />
+
+    <TextView
+        android:id="@+id/response_Currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/text_Currency"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/text_Currency" />
+
+    <TextView
+        android:id="@+id/text_Country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Country"
+        android:textAlignment="center"
+        android:textSize="13sp"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/text_CIK"
+        app:layout_constraintTop_toBottomOf="@+id/response_CIK" />
+
+    <TextView
+        android:id="@+id/text_Description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="Description"
+        android:textAlignment="center"
+        android:textSize="13sp"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/text_CIK"
+        app:layout_constraintTop_toBottomOf="@+id/response_CIK" />
+
+    <TextView
+        android:id="@+id/response_Description"
+        android:layout_width="369dp"
+        android:layout_height="113dp"
+        android:layout_marginTop="12dp"
+        android:text="Description"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="@id/text_Description"
+        app:layout_constraintTop_toBottomOf="@+id/text_Description"
+        app:layout_constraintEnd_toEndOf="@+id/button_showMore"/>
+
+    <TextView
+        android:id="@+id/response_Country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/text_Country"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/text_Country" />
+
+    <TextView
+        android:id="@+id/text_Sector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/text_Currency"
+        android:layout_marginTop="8dp"
+        android:text="Sector"
+        android:textAlignment="center"
+        android:textSize="13sp"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toEndOf="@id/text_Country"
+        app:layout_constraintTop_toBottomOf="@+id/response_Currency" />
+
+    <TextView
+        android:id="@+id/response_Sector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/text_Sector"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/text_Sector" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="450dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_showMore"
+        app:layout_constraintBottom_toTopOf="parent">
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/button_showMore"
+        android:layout_width="147dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="@color/white"
+        android:text="Show More"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintTop_toBottomOf="@+id/response_Description"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="402dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
