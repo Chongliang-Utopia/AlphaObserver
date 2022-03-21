@@ -9,6 +9,7 @@ import android.widget.Button;
 
 public class EntryPage extends AppCompatActivity {
     private Button loginButton;
+    private Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,13 +20,21 @@ public class EntryPage extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openLoginPage();
+                openPage(LoginPage.class);
+            }
+        });
+
+        registerButton = (Button) findViewById(R.id.button_entry_register);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openPage(RegisterPage.class);
             }
         });
     }
 
-    private void openLoginPage() {
-        Intent intent = new Intent(this, LoginPage.class);
+    private void openPage(Class<?> cls) {
+        Intent intent = new Intent(this, cls);
         startActivity(intent);
     }
 }
