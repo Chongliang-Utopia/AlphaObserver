@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AlphaObserver">
         <activity
-            android:name=".EntryPage"
+            android:name=".LoginPage"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".EntryPage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
