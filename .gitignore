@@ -38,6 +38,7 @@ captures/
 
 # IntelliJ
 *.iml
+.idea/misc.xml
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
@@ -84,3 +85,10 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 .DS_Store
+.idea/misc.xml
+.idea/*
+.idea/
+.idea/compiler.xml
+.idea/deploymentTargetDropDown.xml
+.idea/gradle.properties
+.idea/misc.xml
