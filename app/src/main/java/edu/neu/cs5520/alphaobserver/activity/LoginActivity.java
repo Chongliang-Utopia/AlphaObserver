@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 
 import edu.neu.cs5520.alphaobserver.R;
-import edu.neu.cs5520.alphaobserver.activity.EntryActivity;
 
 public class LoginActivity extends AppCompatActivity {
     private Button backButton;
