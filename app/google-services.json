@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "39289709967",
+    "project_id": "alphaobserver-4a0eb",
+    "storage_bucket": "alphaobserver-4a0eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:39289709967:android:c26316e6df7a093fb557fa",
+        "android_client_info": {
+          "package_name": "edu.neu.cs5520.alphaobserver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "39289709967-2i5dm8leeudipcir2p8bqju2aghb04f6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAulnO9PS3n11O-56Coz4lOC6x75zbOHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "39289709967-2i5dm8leeudipcir2p8bqju2aghb04f6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
