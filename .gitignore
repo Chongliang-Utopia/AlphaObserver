@@ -88,3 +88,7 @@ lint/tmp/
 .idea/misc.xml
 .idea/*
 .idea/
+.idea/compiler.xml
+.idea/deploymentTargetDropDown.xml
+.idea/gradle.properties
+.idea/misc.xml
