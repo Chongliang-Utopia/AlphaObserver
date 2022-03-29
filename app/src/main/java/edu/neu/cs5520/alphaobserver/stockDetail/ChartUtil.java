@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
+import android.security.keystore.StrongBoxUnavailableException;
 
 import androidx.core.content.ContextCompat;
 
@@ -16,6 +17,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Utils;
 
 import java.util.ArrayList;
@@ -27,30 +29,28 @@ public class ChartUtil {
 
 
     public static void setChartAxis(LineChart chart) {
-        XAxis xAxis;
-        {   // // X-Axis Style // //
-            xAxis = chart.getXAxis();
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setTextSize(11f);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(false);
 
-            // vertical grid lines
-            xAxis.enableGridDashedLine(10f, 10f, 0f);
+        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setTextColor(ColorTemplate.getHoloBlue());
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGranularityEnabled(false);
+        leftAxis.enableGridDashedLine(10f, 10f, 0f);
+        leftAxis.setDrawLabels(false);
+        leftAxis.setDrawAxisLine(false);
 
-            xAxis.setDrawLabels(false);
 
-        }
+        YAxis rightAxis = chart.getAxisRight();
+        rightAxis.setTextColor(Color.BLACK);
 
-        YAxis yAxis;
-        {   // // Y-Axis Style // //
-            yAxis = chart.getAxisLeft();
-
-            // disable dual axis (only use LEFT axis)
-            chart.getAxisRight().setEnabled(false);
-
-            // horizontal grid lines
-            yAxis.enableGridDashedLine(10f, 10f, 0f);
-
-            yAxis.setDrawLabels(false);
-
-        }
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setDrawZeroLine(false);
+        rightAxis.setGranularityEnabled(false);
+        rightAxis.setDrawAxisLine(false);
     }
 
     public static void setChartData(final LineChart chart, List<float[]> data, Context context) {
@@ -72,34 +72,20 @@ public class ChartUtil {
 
             // Line Color and weight
             dataSet.setColor(0xFFB48DD2);
-            dataSet.setLineWidth(3f);
+            dataSet.setLineWidth(2f);
 
             // disable description text
             chart.getDescription().setEnabled(false);
 
             dataSet.setDrawIcons(false);
 
-            // draw dashed line
-            dataSet.enableDashedLine(10f, 5f, 0f);
-
-            // black lines and points
-            dataSet.setColor(0xFFB48DD2);
-            dataSet.setCircleColor(Color.BLACK);
-
-            // line thickness and point size
-            dataSet.setLineWidth(1f);
-            dataSet.setCircleRadius(3f);
-
-            // draw points as solid circles
+            dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+            dataSet.setDrawCircles(false);
+            dataSet.setDrawValues(false);
+            dataSet.setFillAlpha(65);
+            dataSet.setFillColor(ColorTemplate.getHoloBlue());
+            dataSet.setHighLightColor(Color.rgb(244, 117, 117));
             dataSet.setDrawCircleHole(false);
-
-            // customize legend entry
-            dataSet.setFormLineWidth(1f);
-            dataSet.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
-            dataSet.setFormSize(15.f);
-
-            // text size of values
-            dataSet.setValueTextSize(12f);
 
             // draw selection line as dashed
             dataSet.enableDashedHighlightLine(10f, 5f, 0f);
