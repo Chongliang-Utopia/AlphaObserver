@@ -44,7 +44,7 @@ public class StockModel {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                JSONObject response = fetchStockData(stockSymbol);
+                JSONObject response = fetchStockData(getDailyURl(stockSymbol));
                 data = parseData(response);
 
                 Log.e(TAG, String.valueOf(data));
@@ -108,14 +108,18 @@ public class StockModel {
         return data;
     }
 
-    public static JSONObject fetchStockData(String stockSymbol) {
+    static String getDailyURl(String stockSymbol) {
+        return "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + stockSymbol +
+                "&apikey=8A21BM84MW62L4C0";
+    }
+
+    public static JSONObject fetchStockData(String URL_WEB) {
 
 
         URL url = null;
         try {
 
-            url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + stockSymbol +
-                    "&apikey=8A21BM84MW62L4C0");
+            url = new URL(URL_WEB);
             //url = new URL(params[0]);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
