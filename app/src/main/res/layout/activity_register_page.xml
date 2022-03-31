@@ -77,6 +77,20 @@
                     android:inputType="textPersonName" />
 
                 <TextView
+                    android:id="@+id/text_register_username_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username" />
+
+                <EditText
+                    android:id="@+id/text_register_username_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="enter your unique username"
+                    android:inputType="textPersonName" />
+
+                <TextView
                     android:id="@+id/text_register_password_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -97,7 +111,6 @@
                     android:textAllCaps="false"
                     app:cornerRadius="100dp"
                     android:backgroundTint="#B39BC9"
-                    android:alpha="0.5"
                     android:textSize="25dp"
                     android:text="Register"
                     android:layout_marginTop="10dp"/>
