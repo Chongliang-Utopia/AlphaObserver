@@ -163,6 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
                 User user = new User(emailString, usernameString, passwordString);
                 dbRef.push().setValue(user);
                 Toast.makeText(RegisterActivity.this, REGISTER_SUCESS, Toast.LENGTH_SHORT).show();
+                openPage(EntryActivity.class);
             }
         });
     }
