@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import edu.neu.cs5520.alphaobserver.stockDetail.StockDetailActivity;
+import edu.neu.cs5520.alphaobserver.activity.UserDashboardActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,7 +14,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(MainActivity.this, StockDetailActivity.class));
+        Intent intent = new Intent(this, UserDashboardActivity.class);
+        intent.putExtra("USER_NAME", "linni");
+        startActivity(intent);
 
     }
 }
