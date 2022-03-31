@@ -47,8 +47,6 @@ public class RegisterActivity extends AppCompatActivity {
     private final static String EMPTY_USERNAME = "Empty username!";
     private final static String EMPTY_EMAIL_ADDRESS = "Empty email address!";
     private final static String INVALID_EMAIL_ADDRESS = "Invalid email address!";
-    private final static String INVALID_PASSWORD = "Invalid password!";
-    private final static String INVALID_USERNAME = "Invalid username!";
     private final static String EMPTY_PASSWORD = "Empty password!";
     private final static String REGISTER_SUCESS = "Registered successfully!";
 
@@ -62,8 +60,6 @@ public class RegisterActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.text_register_email_value);
         username = (EditText) findViewById(R.id.text_register_username_value);
         password = (EditText) findViewById(R.id.text_register_password_value);
-        existedEmails = new HashSet<>();
-        existedUsernames = new HashSet<>();
 
         email.addTextChangedListener(new TextWatcher() {
             @Override
@@ -134,6 +130,8 @@ public class RegisterActivity extends AppCompatActivity {
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                existedEmails = new HashSet<>();
+                existedUsernames = new HashSet<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     existedEmails.add(user.getEmail());
