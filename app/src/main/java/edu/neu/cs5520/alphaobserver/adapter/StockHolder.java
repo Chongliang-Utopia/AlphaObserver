@@ -47,7 +47,7 @@ public class StockHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         this.currentUser = currentUser;
-        dbRef = FirebaseDatabase.getInstance().getReference().child("StockSave");
+        dbRef = FirebaseDatabase.getInstance().getReference().child("StockSave").child(this.currentUser);
 
         stockSymbol = (TextView) itemView.findViewById(R.id.text_view_stock_symbol);
         stockType = (TextView) itemView.findViewById(R.id.text_view_stock_type);
@@ -58,19 +58,14 @@ public class StockHolder extends RecyclerView.ViewHolder {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Query userQuery = dbRef.orderByChild("username").equalTo(currentUser);
-
+                String currentStockSymbol = stockSymbol.getText().toString();
+                Query userQuery = dbRef.orderByChild("symbol").equalTo(currentStockSymbol);
                 userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                            StockSave stockSave = snapshot.getValue(StockSave.class);
-                            String stockSymbolRecord = stockSave.getSymbol();
-                            String currentStockSymbol = stockSymbol.getText().toString();
-                            if (stockSymbolRecord.equals(currentStockSymbol)) {
-                                snapshot.getRef().removeValue();
-                                Toast.makeText(view.getContext(), REMOVE_SAVED_STOCK_SUCCESS, Toast.LENGTH_SHORT).show();
-                            }
+                            snapshot.getRef().removeValue();
+                            Toast.makeText(view.getContext(), REMOVE_SAVED_STOCK_SUCCESS, Toast.LENGTH_SHORT).show();
                         }
                     }
 
