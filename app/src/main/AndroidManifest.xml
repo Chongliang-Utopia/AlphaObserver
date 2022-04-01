@@ -15,6 +15,9 @@
         android:theme="@style/Theme.AlphaObserver">
         <activity
             android:name=".activity.EntryActivity"
+        android:exported="false" />
+        <activity
+            android:name=".activity.ReviewActivity"
             android:exported="false" />
         <activity
             android:name=".stockDetail.StockDetailActivity"

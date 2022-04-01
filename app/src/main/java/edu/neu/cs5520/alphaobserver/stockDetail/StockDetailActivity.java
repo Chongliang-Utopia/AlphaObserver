@@ -23,6 +23,9 @@ public class StockDetailActivity extends AppCompatActivity {
     MonthFragment monthFragment = new MonthFragment();
     Handler mainThreadHandler;
 
+    String stockSymbol = "PINS";
+    String stockName = "Pinterest";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +35,7 @@ public class StockDetailActivity extends AppCompatActivity {
         // TODO: verify
         StockModel.setModel(weekFragment, monthFragment, mainThreadHandler);
         // TODO: get stock name
-        StockModel.setData("IBM");
+        StockModel.setData(stockSymbol);
 
         FragmentManager fm = getSupportFragmentManager();
 
