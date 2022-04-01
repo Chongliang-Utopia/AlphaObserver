@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserDashboardActivity extends AppCompatActivity {
     private TextView greeting;
+    private TextView emptyListMsg;
     private String currentUser;
     private DatabaseReference dbRef;
     private RecyclerView recyclerView;
@@ -81,7 +83,7 @@ public class UserDashboardActivity extends AppCompatActivity {
         loadingSpinner = (ProgressBar) findViewById(R.id.loading_spinner);
         refreshButton = (MaterialButton) findViewById(R.id.button_refresh);
 
-        dbRef = FirebaseDatabase.getInstance().getReference().child("StockSave");
+        dbRef = FirebaseDatabase.getInstance().getReference().child("StockSave").child(currentUser);
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -98,7 +100,11 @@ public class UserDashboardActivity extends AppCompatActivity {
                         stockCardList.add(stockCard);
                     }
                 }
-                fetchStock();
+                if (stockCardList.isEmpty()) {
+                    emptyListMsg.setVisibility(View.VISIBLE);
+                } else {
+                    fetchStock();
+                }
             }
 
             @Override
@@ -111,8 +117,9 @@ public class UserDashboardActivity extends AppCompatActivity {
 //        dbRef.push().setValue(new StockSave("linni", "SHOP.TRT"));
 
         greeting = (TextView) findViewById(R.id.text_dashboard_greeting);
-
         greeting.setText(getCurrentTime() + currentUser + "!");
+
+        emptyListMsg = (TextView) findViewById(R.id.text_view_empty_list_msg);
 
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,6 +257,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     }
 
     private void toggleResultSpinnerView(boolean showResult) {
+        emptyListMsg.setVisibility(View.GONE);
         recyclerView.setVisibility(showResult ? View.VISIBLE : View.GONE);
         loadingSpinner.setVisibility(showResult ? View.GONE : View.VISIBLE);
     }

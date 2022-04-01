@@ -50,8 +50,18 @@
             </LinearLayout>
 
         </RelativeLayout>
+        <TextView
+            android:id="@+id/text_view_empty_list_msg"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:text="Empty list now, start to save more stocks!"
+            android:textColor="#363B46"
+            android:textSize="24dp"
+            android:gravity="center" />
         <androidx.recyclerview.widget.RecyclerView
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_weight="4"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -62,11 +72,12 @@
             android:visibility="gone"
             android:id="@+id/loading_spinner"
             style="?android:attr/progressBarStyleLarge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_weight="4"
             android:progressDrawable="@drawable/circular_progress"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
