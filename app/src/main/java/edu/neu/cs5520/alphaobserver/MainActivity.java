@@ -15,11 +15,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, UserDashboardActivity.class);
-        intent.putExtra("USER_NAME", "linni");
-        startActivity(intent);
-
-//        Intent intent = new Intent(this, EntryActivity.class);
+//        Intent intent = new Intent(this, UserDashboardActivity.class);
+//        intent.putExtra("USER_NAME", "linni");
 //        startActivity(intent);
+
+        Intent intent = new Intent(this, EntryActivity.class);
+        startActivity(intent);
     }
 }
