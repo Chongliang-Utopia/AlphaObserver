@@ -1,4 +1,4 @@
-package edu.neu.cs5520.alphaobserver.stockDetail;
+package edu.neu.cs5520.alphaobserver.fragment;
 
 import android.os.Bundle;
 
@@ -13,6 +13,8 @@ import com.github.mikephil.charting.charts.LineChart;
 import java.util.List;
 
 import edu.neu.cs5520.alphaobserver.R;
+import edu.neu.cs5520.alphaobserver.model.TimePeriod;
+import edu.neu.cs5520.alphaobserver.util.ChartUtil;
 
 /**
  * A simple {@link Fragment} subclass.

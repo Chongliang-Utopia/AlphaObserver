@@ -1,4 +1,4 @@
-package edu.neu.cs5520.alphaobserver.stockDetail;
+package edu.neu.cs5520.alphaobserver.fragment;
 
 import android.os.Bundle;
 
@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import com.github.mikephil.charting.charts.LineChart;
 
 import edu.neu.cs5520.alphaobserver.R;
+import edu.neu.cs5520.alphaobserver.model.TimePeriod;
+import edu.neu.cs5520.alphaobserver.service.StockService;
+import edu.neu.cs5520.alphaobserver.util.ChartUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +37,7 @@ public class MonthFragment extends Fragment {
 
         chart = (LineChart) view.findViewById(R.id.month_chart);
         ChartUtil.setChartAxis(chart);
-        ChartUtil.setChartData(chart, StockModel.getData().subList(0, timePeriod.getNumberOfDays()), getContext());
+        ChartUtil.setChartData(chart, StockService.getData().subList(0, timePeriod.getNumberOfDays()), getContext());
 
         return view;
     }

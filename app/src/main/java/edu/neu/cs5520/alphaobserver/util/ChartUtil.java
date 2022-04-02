@@ -1,4 +1,4 @@
-package edu.neu.cs5520.alphaobserver.stockDetail;
+package edu.neu.cs5520.alphaobserver.util;
 
 import android.content.Context;
 import android.graphics.Color;

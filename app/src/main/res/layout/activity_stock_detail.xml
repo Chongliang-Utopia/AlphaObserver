@@ -4,25 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".stockDetail.StockDetailActivity">
+    android:layout_margin="20dp"
+    tools:context=".activity.StockDetailActivity">
 
 
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp">
+            android:layout_height="wrap_content"
+            android:id="@+id/title">
 
             <TextView
                 android:id="@+id/stockName"
@@ -52,55 +44,69 @@
                 app:layout_constraintTop_toBottomOf="@+id/stockName" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/pager"
-            android:layout_weight="1"
-            android:layout_height="0dp"
-            android:layout_width="match_parent"/>
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
-        <Button
-            android:textAllCaps="false"
-            android:id="@+id/StockReview"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/buttons"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content">
+            <Button
+                android:textAllCaps="false"
+                android:id="@+id/StockReview"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_margin="20dp"
+                android:backgroundTint="@color/gray"
+                android:text="Stock Reviews"
+                android:textColor="@color/purple"
+                android:textSize="24sp"
+                app:cornerRadius="20dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/AboutCompany"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:textAllCaps="false"
+                android:id="@+id/AboutCompany"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/purple"
+                android:text="About Pinterest"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                app:cornerRadius="20dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/Chart"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/gray"
-            android:text="Stock Reviews"
-            android:textColor="@color/purple"
-            android:textSize="24sp"
-            app:cornerRadius="20dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/AboutCompany"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:textAllCaps="false"
-            android:id="@+id/AboutCompany"
+            android:layout_below="@+id/title"
+            android:layout_above="@+id/buttons"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/purple"
-            android:text="About Pinterest"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
-            app:cornerRadius="20dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-        </LinearLayout>
-
-
-
-
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/pager"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    android:layout_width="match_parent"/>
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

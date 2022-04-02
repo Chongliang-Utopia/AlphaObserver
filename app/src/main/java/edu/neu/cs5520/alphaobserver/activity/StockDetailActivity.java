@@ -1,4 +1,4 @@
-package edu.neu.cs5520.alphaobserver.stockDetail;
+package edu.neu.cs5520.alphaobserver.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +16,9 @@ import android.os.Looper;
 import com.google.android.material.tabs.TabLayout;
 
 import edu.neu.cs5520.alphaobserver.R;
+import edu.neu.cs5520.alphaobserver.fragment.MonthFragment;
+import edu.neu.cs5520.alphaobserver.service.StockService;
+import edu.neu.cs5520.alphaobserver.fragment.WeekFragment;
 
 public class StockDetailActivity extends AppCompatActivity {
 
@@ -23,8 +26,10 @@ public class StockDetailActivity extends AppCompatActivity {
     MonthFragment monthFragment = new MonthFragment();
     Handler mainThreadHandler;
 
-    String stockSymbol = "PINS";
-    String stockName = "Pinterest";
+    String stockSymbol;
+    String stockName;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +37,14 @@ public class StockDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stock_detail);
         mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
+        // TODO:
+        stockSymbol = "PINS";
+        stockName = "Pinterest";
+
         // TODO: verify
-        StockModel.setModel(weekFragment, monthFragment, mainThreadHandler);
+        StockService.setModel(weekFragment, monthFragment, mainThreadHandler);
         // TODO: get stock name
-        StockModel.setData(stockSymbol);
+        StockService.setData(stockSymbol);
 
         FragmentManager fm = getSupportFragmentManager();
 

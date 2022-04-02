@@ -1,4 +1,4 @@
-package edu.neu.cs5520.alphaobserver.stockDetail;
+package edu.neu.cs5520.alphaobserver.service;
 
 import android.os.Handler;
 import android.util.Log;
@@ -20,7 +20,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class StockModel {
+import edu.neu.cs5520.alphaobserver.fragment.MonthFragment;
+import edu.neu.cs5520.alphaobserver.fragment.WeekFragment;
+
+public class StockService {
 
     static List<float[]> data;
     private static final String TAG = "WebServiceActivity";
