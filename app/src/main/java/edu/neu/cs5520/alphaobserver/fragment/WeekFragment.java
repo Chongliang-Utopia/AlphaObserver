@@ -34,7 +34,7 @@ public class WeekFragment extends Fragment {
 
         chart = (LineChart) getActivity().findViewById(R.id.week_chart);
         ChartUtil.setChartAxis(chart);
-        ChartUtil.setChartData(chart, data.subList(0, timePeriod.getNumberOfDays()), getContext());
+        ChartUtil.setChartData(chart, data.subList(data.size()-timePeriod.getNumberOfDays(), data.size()), getContext());
 
     }
 

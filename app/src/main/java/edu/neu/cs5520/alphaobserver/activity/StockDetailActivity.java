@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -37,12 +38,12 @@ public class StockDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stock_detail);
         mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
-        // TODO:
+        // TODO: Get from intent
         stockSymbol = "PINS";
         stockName = "Pinterest";
 
         // TODO: verify
-        StockService.setModel(weekFragment, monthFragment, mainThreadHandler);
+        StockService.setModel(weekFragment, monthFragment, mainThreadHandler, this);
         // TODO: get stock name
         StockService.setData(stockSymbol);
 
@@ -84,6 +85,10 @@ public class StockDetailActivity extends AppCompatActivity {
         });
 
         // And now we have tabs that, when clicked, navigate to the correct page
+    }
+    public void setStockPrice (float price) {
+        TextView textView = (TextView) findViewById(R.id.stockPrice);
+        textView.setText("$" + String.valueOf(price));
     }
     private class ViewStateAdapter extends FragmentStateAdapter {
 

@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import edu.neu.cs5520.alphaobserver.activity.StockDetailActivity;
 import edu.neu.cs5520.alphaobserver.fragment.MonthFragment;
 import edu.neu.cs5520.alphaobserver.fragment.WeekFragment;
 
@@ -31,11 +32,13 @@ public class StockService {
     private static WeekFragment bar;
     private static MonthFragment foo;
     private static Handler handler;
+    private static StockDetailActivity activity;
 
-    public static void setModel(WeekFragment weekFragment, MonthFragment monthFragment, Handler mainThreadHandler) {
+    public static void setModel(WeekFragment weekFragment, MonthFragment monthFragment, Handler mainThreadHandler, StockDetailActivity stockDetailActivity) {
         bar = weekFragment;
         foo = monthFragment;
         handler = mainThreadHandler;
+        activity = stockDetailActivity;
     }
 
     public static List<float[]> getData() {
@@ -62,6 +65,7 @@ public class StockService {
                                 //createChart(data);
 //                                bar.setText("New Text");
 //                                foo.setText("New Text");
+                                activity.setStockPrice(data.get(data.size()-1)[1]);
                                 bar.setChart(data);
 
                             }
