@@ -9,15 +9,33 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import edu.neu.cs5520.alphaobserver.R;
 import edu.neu.cs5520.alphaobserver.fragment.MonthFragment;
+import edu.neu.cs5520.alphaobserver.model.StockCard;
+import edu.neu.cs5520.alphaobserver.model.StockReview;
+import edu.neu.cs5520.alphaobserver.model.StockSave;
 import edu.neu.cs5520.alphaobserver.service.StockService;
 import edu.neu.cs5520.alphaobserver.fragment.WeekFragment;
 
@@ -29,8 +47,11 @@ public class StockDetailActivity extends AppCompatActivity {
 
     String stockSymbol;
     String stockName;
+    String currentUser;
 
+    int stockSaveCnt = 0;
 
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +60,48 @@ public class StockDetailActivity extends AppCompatActivity {
         mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
         // TODO: Get from intent
-        stockSymbol = "PINS";
-        stockName = "Pinterest";
+        Bundle data = getIntent().getExtras();
+        currentUser = data.getString("USER_NAME");
+        stockSymbol = data.getString("STOCK_SYMBOL");
+        stockName = data.getString("STOCK_NAME");
 
-        // TODO: verify
+        TextView stockNameText = findViewById(R.id.stockName);
+        stockNameText.setText(stockName);
+        TextView stockSymbolText = findViewById(R.id.stockNSymbol);
+        stockSymbolText.setText(stockSymbol);
+
+
         StockService.setModel(weekFragment, monthFragment, mainThreadHandler, this);
-        // TODO: get stock name
         StockService.setData(stockSymbol);
+
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        // DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Review").child(stockSymbol).push();
+        // Task t = myRef.setValue(new StockReview(currentUser, stockSymbol, "This stock is good! \nThis stock is good!", System.currentTimeMillis()));
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child("StockSave");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    HashMap<String, HashMap<String, String>> stockSaveMap = (HashMap<String, HashMap<String, String>>)snapshot.getValue();
+                    for (String key: stockSaveMap.keySet()) {
+                        HashMap<String, String> map = stockSaveMap.get(key);
+                        String symbol = map.get("symbol");
+                        if (symbol.equals(stockSymbol)) {
+                            stockSaveCnt++;
+                        }
+                    }
+                }
+                TextView stockNameText = findViewById(R.id.saveNumber);
+                stockNameText.setText(String.valueOf(stockSaveCnt));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+
+        // Fragments
 
         FragmentManager fm = getSupportFragmentManager();
 
@@ -110,6 +166,24 @@ public class StockDetailActivity extends AppCompatActivity {
         public int getItemCount() {
             // Hardcoded, use lists
             return 2;
+        }
+    }
+    public void buttonOnClick(View v) {
+        switch (v.getId()) {
+            case R.id.StockReview:
+                Intent intent= new Intent(StockDetailActivity.this, ReviewActivity.class);
+                intent.putExtra("STOCK_SYMBOL", stockSymbol);
+                intent.putExtra("STOCK_NAME", stockName);
+                intent.putExtra("USER_NAME", currentUser);
+                startActivity(intent);
+                break;
+            case R.id.AboutCompany:
+                break;
+            case R.id.button_stock_save:
+                Log.e("button", "clicked");
+                break;
+            default:
+                break;
         }
     }
 }

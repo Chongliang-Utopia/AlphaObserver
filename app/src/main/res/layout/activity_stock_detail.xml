@@ -12,6 +12,7 @@
         android:layout_height="120dp"
         android:background="@drawable/user_dashboard_bg"
         android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
@@ -22,9 +23,9 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/title">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/stockName"
@@ -54,19 +55,50 @@
                 app:layout_constraintTop_toBottomOf="@+id/stockName" />
 
             <TextView
+                android:id="@+id/saveNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/button_stock_save"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_stock_save"
+                android:layout_width="73dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:backgroundTint="#F0F0F0"
+                android:gravity="center"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="25dp"
+                android:insetBottom="0dp"
+                android:onClick="buttonOnClick"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_baseline_star_24"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="48dp"
+                app:iconTint="#B48DD2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/stockPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
                 android:text="$54.32"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginTop="40dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/stockNSymbol" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -78,35 +110,38 @@
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_height="wrap_content">
+
             <Button
-                android:textAllCaps="false"
                 android:id="@+id/StockReview"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_margin="20dp"
                 android:backgroundTint="@color/gray"
+                android:onClick="buttonOnClick"
                 android:text="Stock Reviews"
+                android:textAllCaps="false"
                 android:textColor="@color/purple"
                 android:textSize="24sp"
-                app:cornerRadius="20dp"
                 android:textStyle="bold"
+                app:cornerRadius="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/AboutCompany"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
-                android:textAllCaps="false"
                 android:id="@+id/AboutCompany"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:backgroundTint="@color/purple"
+                android:onClick="buttonOnClick"
                 android:text="About Pinterest"
+                android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="24sp"
-                app:cornerRadius="20dp"
                 android:textStyle="bold"
+                app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

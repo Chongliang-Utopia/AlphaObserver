@@ -30,7 +30,7 @@ public class ReviewActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private String currentUser;
     private String stockSymbol;
-
+    private String stockName;
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -44,8 +44,8 @@ public class ReviewActivity extends AppCompatActivity {
 
         Bundle data = getIntent().getExtras();
         currentUser = data.getString("USER_NAME");
-
-        stockSymbol = "PINS";
+        stockSymbol = data.getString("STOCK_SYMBOL");
+        stockName = data.getString("STOCK_NAME");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
        // DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Review").child(stockSymbol).push();
@@ -57,10 +57,7 @@ public class ReviewActivity extends AppCompatActivity {
                 reviewList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     StockReview stockReview = snapshot.getValue(StockReview.class);
-                    String username = stockReview.getUsername();
-                    if (username.equals(currentUser)) {
-                        reviewList.add(stockReview);
-                    }
+                    reviewList.add(stockReview);
                 }
                 createRecyclerView();
             }
