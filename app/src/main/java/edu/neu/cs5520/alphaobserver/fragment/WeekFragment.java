@@ -1,9 +1,12 @@
 package edu.neu.cs5520.alphaobserver.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import java.util.List;
 
 import edu.neu.cs5520.alphaobserver.R;
 import edu.neu.cs5520.alphaobserver.model.TimePeriod;
+import edu.neu.cs5520.alphaobserver.service.StockService;
 import edu.neu.cs5520.alphaobserver.util.ChartUtil;
 
 /**
@@ -30,11 +34,12 @@ public class WeekFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public void setChart(List<float[]> data) {
-
-        chart = (LineChart) getActivity().findViewById(R.id.week_chart);
+    public void setChart(List<float[]> data, Activity activity) {
+        if (activity == null) return;
+        chart = (LineChart) activity.findViewById(R.id.week_chart);
+        if (chart == null) return;
         ChartUtil.setChartAxis(chart);
-        ChartUtil.setChartData(chart, data.subList(data.size()-timePeriod.getNumberOfDays(), data.size()), getContext());
+        ChartUtil.setChartData(chart, data.subList(data.size()-timePeriod.getNumberOfDays(), data.size()), activity);
 
     }
 
@@ -44,6 +49,14 @@ public class WeekFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_week, container, false);
+
+        chart = (LineChart) view.findViewById(R.id.week_chart);
+        if (chart == null) return view;
+        ChartUtil.setChartAxis(chart);
+        List<float[]> data = StockService.getData();
+        Activity activity = StockService.getAct();
+        if (data == null) return view;
+        ChartUtil.setChartData(chart, data.subList(data.size()-timePeriod.getNumberOfDays(), data.size()), activity);
 
         return view;
     }

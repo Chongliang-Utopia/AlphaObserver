@@ -86,67 +86,95 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/stockPrice"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="40dp"-->
-<!--                android:text="$54.32"-->
-<!--                android:textAllCaps="true"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="24sp"-->
-<!--                android:textStyle="bold"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/stockNSymbol" />-->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_stock_unsave"
+                android:layout_width="73dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:backgroundTint="#F0F0F0"
+                android:gravity="center"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="25dp"
+                android:insetBottom="0dp"
+                android:onClick="buttonOnClick"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_baseline_star_border_24"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="48dp"
+                app:iconTint="#B48DD2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttons"
-            android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_height="wrap_content">
+            android:layout_width="210dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="10dp">
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:layout_height="match_parent">-->
-<!--                <Button-->
-<!--                    android:id="@+id/StockReview"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:layout_height="60dp"-->
-<!--                    android:layout_marginLeft="20dp"-->
-<!--                    android:layout_marginRight="20dp"-->
-<!--                    android:backgroundTint="@color/gray"-->
-<!--                    android:onClick="buttonOnClick"-->
-<!--                    android:text="Stock Reviews"-->
-<!--                    android:textAllCaps="false"-->
-<!--                    android:textColor="@color/purple"-->
-<!--                    android:textSize="24sp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    app:cornerRadius="20dp" />-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
 
-<!--            <Button-->
-<!--                android:id="@+id/AboutCompany"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:layout_marginLeft="20dp"-->
-<!--                android:layout_marginRight="20dp"-->
-<!--                android:backgroundTint="@color/purple"-->
-<!--                android:onClick="buttonOnClick"-->
-<!--                android:text="About Pinterest"-->
-<!--                android:textAllCaps="false"-->
-<!--                android:textColor="@android:color/white"-->
-<!--                android:textSize="24sp"-->
-<!--                android:textStyle="bold"-->
-<!--                app:cornerRadius="20dp" />-->
-<!--            </LinearLayout>-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/stockPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="$54.32"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/StockReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/gray"
+                    android:onClick="buttonOnClick"
+                    android:text="Stock Reviews"
+                    android:textAllCaps="false"
+                    android:textColor="@color/purple"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="20dp" />
+
+                <Button
+                    android:id="@+id/AboutCompany"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/purple"
+                    android:onClick="buttonOnClick"
+                    android:text="About Pinterest"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="20dp"
+                    />
+            </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -156,12 +184,18 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="250dp"
             android:layout_below="@+id/title"
-            android:layout_above="@+id/buttons"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
+                    android:indeterminate="true" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -1,5 +1,7 @@
 package edu.neu.cs5520.alphaobserver.activity;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.os.HandlerCompat;
@@ -15,13 +17,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
@@ -51,7 +58,31 @@ public class StockDetailActivity extends AppCompatActivity {
 
     int stockSaveCnt = 0;
 
+    Button savedButton;
+    Button unsavedButton;
+
+    boolean saved = false;
+
     private DatabaseReference mDatabase;
+
+    private ProgressBar progressBar;
+
+    private static final String REMOVE_SAVED_STOCK_SUCCESS = "Successfully remove the saved stock!";
+    private static final String ADD_SAVED_STOCK_SUCCESS = "Successfully saved stock!";
+
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//
+//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("RESUME", "RESUME");
+        // Fetch data and create chart.
+        Log.e("stockSymbol", stockSymbol);
+//        StockService.setModel(weekFragment, monthFragment, mainThreadHandler, this);
+//        StockService.setData(stockSymbol);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +101,14 @@ public class StockDetailActivity extends AppCompatActivity {
         TextView stockSymbolText = findViewById(R.id.stockNSymbol);
         stockSymbolText.setText(stockSymbol);
 
+        Button aboutCompanyBtn = findViewById(R.id.AboutCompany);
+        aboutCompanyBtn.setText("About " + stockName);
 
+        savedButton = findViewById(R.id.button_stock_save);
+        unsavedButton = findViewById(R.id.button_stock_unsave);
+
+
+        // Fetch data and create chart.
         StockService.setModel(weekFragment, monthFragment, mainThreadHandler, this);
         StockService.setData(stockSymbol);
 
@@ -83,6 +121,9 @@ public class StockDetailActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                stockSaveCnt = 0;
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     HashMap<String, HashMap<String, String>> stockSaveMap = (HashMap<String, HashMap<String, String>>)snapshot.getValue();
                     for (String key: stockSaveMap.keySet()) {
@@ -91,10 +132,21 @@ public class StockDetailActivity extends AppCompatActivity {
                         if (symbol.equals(stockSymbol)) {
                             stockSaveCnt++;
                         }
+                        String username = map.get("username");
+                        if (username.equals(currentUser)) {
+                            saved = true;
+                            savedButton.setVisibility(View.VISIBLE);
+                            unsavedButton.setVisibility(View.INVISIBLE);
+                        }
                     }
                 }
                 TextView stockNameText = findViewById(R.id.saveNumber);
                 stockNameText.setText(String.valueOf(stockSaveCnt));
+
+                if (!saved) {
+                    savedButton.setVisibility(View.INVISIBLE);
+                    unsavedButton.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -145,6 +197,9 @@ public class StockDetailActivity extends AppCompatActivity {
     public void setStockPrice (float price) {
         TextView textView = (TextView) findViewById(R.id.stockPrice);
         textView.setText("$" + String.valueOf(price));
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
     }
     private class ViewStateAdapter extends FragmentStateAdapter {
 
@@ -168,6 +223,38 @@ public class StockDetailActivity extends AppCompatActivity {
             return 2;
         }
     }
+
+    private void unSaveStock(View view) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("StockSave").child(this.currentUser);
+        Query userQuery = dbRef.orderByChild("symbol").equalTo(stockSymbol);
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    snapshot.getRef().removeValue();
+                    Toast.makeText(view.getContext(), REMOVE_SAVED_STOCK_SUCCESS, Toast.LENGTH_SHORT).show();
+                    savedButton.setVisibility(View.INVISIBLE);
+                    unsavedButton.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "onCancelled", error.toException());
+            }
+        });
+    }
+    private void saveStock(View view) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("StockSave").child(this.currentUser).push();
+        Task t = dbRef.setValue(new StockSave(currentUser, stockSymbol));
+
+        if (t.isSuccessful()) {
+            Toast.makeText(view.getContext(), ADD_SAVED_STOCK_SUCCESS, Toast.LENGTH_SHORT).show();
+
+            savedButton.setVisibility(View.VISIBLE);
+            unsavedButton.setVisibility(View.INVISIBLE);
+        }
+    }
     public void buttonOnClick(View v) {
         switch (v.getId()) {
             case R.id.StockReview:
@@ -178,9 +265,13 @@ public class StockDetailActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.AboutCompany:
+
+                break;
+            case R.id.button_stock_unsave:
+                saveStock(v);
                 break;
             case R.id.button_stock_save:
-                Log.e("button", "clicked");
+                unSaveStock(v);
                 break;
             default:
                 break;

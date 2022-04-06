@@ -1,5 +1,6 @@
 package edu.neu.cs5520.alphaobserver.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -31,6 +32,15 @@ public class MonthFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public void setChart(List<float[]> data, Activity activity) {
+        if (activity == null) return;
+        chart = (LineChart) activity.findViewById(R.id.month_chart);
+        if (chart == null) return;
+        ChartUtil.setChartAxis(chart);
+        ChartUtil.setChartData(chart, data.subList(data.size()-timePeriod.getNumberOfDays(), data.size()), activity);
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,9 +48,12 @@ public class MonthFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_month, container, false);
 
         chart = (LineChart) view.findViewById(R.id.month_chart);
+        if (chart == null) return view;
         ChartUtil.setChartAxis(chart);
         List<float[]> data = StockService.getData();
-        ChartUtil.setChartData(chart, data.subList(data.size()-timePeriod.getNumberOfDays(), data.size()), getContext());
+        Activity activity = StockService.getAct();
+        if (data == null) return view;
+        ChartUtil.setChartData(chart, data.subList(data.size()-timePeriod.getNumberOfDays(), data.size()), activity);
 
         return view;
     }

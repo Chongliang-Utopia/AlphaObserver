@@ -1,5 +1,6 @@
 package edu.neu.cs5520.alphaobserver.service;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.util.Log;
 
@@ -44,6 +45,9 @@ public class StockService {
     public static List<float[]> getData() {
         return data;
     }
+    public static Activity getAct() {
+        return activity;
+    }
 
     public static void setData(final String stockSymbol)
     {
@@ -66,8 +70,9 @@ public class StockService {
 //                                bar.setText("New Text");
 //                                foo.setText("New Text");
                                 activity.setStockPrice(data.get(data.size()-1)[1]);
-                                bar.setChart(data);
-
+                                bar.setChart(data, activity);
+                                foo.setChart(data, activity);
+                                Log.e("ACTIVITY", activity.toString());
                             }
                         }
                     });
@@ -98,7 +103,7 @@ public class StockService {
 
                 JSONObject priceInfo = timeSeries.getJSONObject(day);
                 float closePrice = Float.parseFloat(priceInfo.getString("4. close"));
-                Log.e("STOCK INFO", day + ", " + closePrice);
+               Log.e("STOCK INFO", day + ", " + closePrice);
 
                 data.add(new float[] {timeSeries.names().length()-1-i, closePrice});
 
