@@ -37,6 +37,11 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.stockCardList = stockCardList;
     }
 
+    public StockSearchAdapter(List<StockCard> stockCardList, String currentUser) {
+        this.stockCardList = stockCardList;
+        this.currentUser = currentUser;
+    }
+
 //    interface ItemClickListener {
 //        void onItemClick(String userName, String symbol);
 //    }
@@ -80,16 +85,22 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
-                                snapshot.getRef().removeValue();
+//                                System.out.println(snapshot.getRef().toString());
+                                for (DataSnapshot ds :snapshot.getChildren()) ds.getRef().removeValue();
                                 Toast.makeText(view.getContext(), REMOVE_SAVED_STOCK_SUCCESS, Toast.LENGTH_SHORT).show();
+                                saveButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_star_border_24, 0, 0 ,0);
+
                             } else {
-                                DatabaseReference newPostRef = dbRef.child(currentUser).push();
+                                DatabaseReference newPostRef = dbRef.push();
                                 try {
                                     newPostRef.setValue(new StockSave(currentUser, currentStockSymbol), new DatabaseReference.CompletionListener() {
                                         @Override
                                         public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                            if (error == null)
+                                            if (error == null) {
                                                 Toast.makeText(view.getContext(), SAVE_STOCK_SUCCESS, Toast.LENGTH_SHORT).show();
+                                                saveButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_star_24, 0, 0 ,0);
+                                            }
+
                                         }
                                     });
                                 } catch (Exception e) {

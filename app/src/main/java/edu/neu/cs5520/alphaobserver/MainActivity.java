@@ -25,12 +25,12 @@ public class MainActivity extends AppCompatActivity {
 //        startActivity(intent);
 
 
-//        Intent intent = new Intent(this, StockDetailActivity.class);
-//        intent.putExtra("USER_NAME", "tcl");
-//        startActivity(intent);
-
-
-        Intent intent = new Intent(this, EntryActivity.class);
+        Intent intent = new Intent(this, StockSearchActivity.class);
+        intent.putExtra("USER_NAME", "tcl");
         startActivity(intent);
+
+
+//        Intent intent = new Intent(this, EntryActivity.class);
+//        startActivity(intent);
     }
 }
