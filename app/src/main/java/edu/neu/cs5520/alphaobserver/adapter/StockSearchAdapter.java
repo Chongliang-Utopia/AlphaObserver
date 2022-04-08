@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -88,7 +89,7 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //                                System.out.println(snapshot.getRef().toString());
                                 for (DataSnapshot ds :snapshot.getChildren()) ds.getRef().removeValue();
                                 Toast.makeText(view.getContext(), REMOVE_SAVED_STOCK_SUCCESS, Toast.LENGTH_SHORT).show();
-                                saveButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_star_border_24, 0, 0 ,0);
+                                saveButton.setIcon(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_baseline_star_border_24));
 
                             } else {
                                 DatabaseReference newPostRef = dbRef.push();
@@ -98,7 +99,7 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                         public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                             if (error == null) {
                                                 Toast.makeText(view.getContext(), SAVE_STOCK_SUCCESS, Toast.LENGTH_SHORT).show();
-                                                saveButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_star_24, 0, 0 ,0);
+                                                saveButton.setIcon(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_baseline_star_24));
                                             }
 
                                         }
@@ -186,7 +187,7 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) ((StockSearchHolder) holder).saveButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_star_24, 0, 0, 0);
+                if (snapshot.exists()) ((StockSearchHolder) holder).saveButton.setIcon(ContextCompat.getDrawable(((StockSearchHolder) holder).saveButton.getContext(), R.drawable.ic_baseline_star_24));;
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
