@@ -9,6 +9,7 @@ import edu.neu.cs5520.alphaobserver.activity.EntryActivity;
 
 import edu.neu.cs5520.alphaobserver.activity.ReviewActivity;
 
+import edu.neu.cs5520.alphaobserver.activity.StockSearchActivity;
 import edu.neu.cs5520.alphaobserver.activity.UserDashboardActivity;
 import edu.neu.cs5520.alphaobserver.stockDetail.StockDetailActivity;
 
