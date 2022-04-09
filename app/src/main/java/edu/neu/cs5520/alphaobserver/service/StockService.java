@@ -20,24 +20,41 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
+import edu.neu.cs5520.alphaobserver.R;
 import edu.neu.cs5520.alphaobserver.activity.StockDetailActivity;
 import edu.neu.cs5520.alphaobserver.fragment.MonthFragment;
 import edu.neu.cs5520.alphaobserver.fragment.WeekFragment;
+import edu.neu.cs5520.alphaobserver.model.JSONPlaceholder;
+import edu.neu.cs5520.alphaobserver.model.StockSearchMatch;
+import edu.neu.cs5520.alphaobserver.model.StockSearchResult;
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class StockService {
+    private static final String SYMBOL_SEARCH = "SYMBOL_SEARCH";
+    private static final String API_KEY = "42Z7B1OTYEEJQCOT";
+    private static final String BASE_URL = "https://www.alphavantage.co/";
 
     static List<float[]> data;
     private static final String TAG = "WebServiceActivity";
 
-    private static WeekFragment bar;
-    private static MonthFragment foo;
+    private static WeekFragment weekFrag;
+    private static MonthFragment monthFrag;
     private static Handler handler;
     private static StockDetailActivity activity;
 
+    private static float price;
+    private static String currency;
+
     public static void setModel(WeekFragment weekFragment, MonthFragment monthFragment, Handler mainThreadHandler, StockDetailActivity stockDetailActivity) {
-        bar = weekFragment;
-        foo = monthFragment;
+        weekFrag = weekFragment;
+        monthFrag = monthFragment;
         handler = mainThreadHandler;
         activity = stockDetailActivity;
     }
@@ -45,17 +62,32 @@ public class StockService {
     public static List<float[]> getData() {
         return data;
     }
+    public static float getPrice() {
+        return price;
+    }
+    public static String getCurrency() {
+        return currency;
+    }
     public static Activity getAct() {
         return activity;
     }
 
     public static void setData(final String stockSymbol)
     {
+        fetchStockSearchResult(stockSymbol, price);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 JSONObject response = fetchStockData(getDailyURl(stockSymbol));
                 data = parseData(response);
+
+
+                // Get currency.
+                if (data.size() > 0) {
+                    price = data.get(data.size()-1)[1];
+                }
+
 
                 Log.e(TAG, String.valueOf(data));
 
@@ -66,13 +98,15 @@ public class StockService {
                             if (data.isEmpty()) {
                                 //Toast.makeText(MainActivity.this, "You may be requesting too often, remote API is not responding, please wait and try again...", Toast.LENGTH_LONG).show();
                             } else {
-                                //createChart(data);
-//                                bar.setText("New Text");
-//                                foo.setText("New Text");
-                                activity.setStockPrice(data.get(data.size()-1)[1]);
-                                bar.setChart(data, activity);
-                                foo.setChart(data, activity);
-                                Log.e("ACTIVITY", activity.toString());
+                                //activity.setStockPrice(data.get(data.size()-1)[1]);
+                                weekFrag.setChart(data, activity);
+                                weekFrag.setPrice(String.valueOf(price), activity.findViewById(R.id.stockPrice_week));
+                                weekFrag.setPercentage(data, activity.findViewById(R.id.stockPercentage_week));
+                                monthFrag.setChart(data, activity);
+                                monthFrag.setPrice(String.valueOf(price), activity.findViewById(R.id.stockPrice_month));
+                                monthFrag.setPercentage(data, activity.findViewById(R.id.stockPercentage_month));
+
+                                activity.setProgressBarInvisible();
                             }
                         }
                     });
@@ -103,7 +137,7 @@ public class StockService {
 
                 JSONObject priceInfo = timeSeries.getJSONObject(day);
                 float closePrice = Float.parseFloat(priceInfo.getString("4. close"));
-               Log.e("STOCK INFO", day + ", " + closePrice);
+                Log.e("STOCK INFO", day + ", " + closePrice);
 
                 data.add(new float[] {timeSeries.names().length()-1-i, closePrice});
 
@@ -175,4 +209,53 @@ public class StockService {
         return s.hasNext() ? s.next().replace(",", ",\n") : "";
     }
 
+
+    private static void fetchStockSearchResult(String stockSymbol, float price) {
+        JSONPlaceholder jsonPlaceholder = buildJSONPlaceholder();
+        Call<StockSearchResult> call = jsonPlaceholder.getStockSearchResult(SYMBOL_SEARCH, stockSymbol, API_KEY);
+        call.enqueue(new Callback<StockSearchResult>() {
+            @Override
+            public void onResponse(Call<StockSearchResult> call, Response<StockSearchResult> response) {
+                if (!response.isSuccessful()) {
+                    return;
+                }
+                StockSearchResult stockSearchResult = response.body();
+                List<StockSearchMatch> stockSearchMatchList = stockSearchResult.getBestMatches();
+
+                if (stockSearchMatchList == null) {
+                } else {
+                    StockSearchMatch topMatch = stockSearchMatchList.get(0);
+                    String stockType = topMatch.getType();
+                    String stockCurrencyString = topMatch.getCurrency();
+                    Log.e("CURRENCY", stockCurrencyString);
+                    currency = stockCurrencyString;
+                    weekFrag.setCurrency(stockCurrencyString, activity.findViewById(R.id.stockCurrency_week));
+                    monthFrag.setCurrency( stockCurrencyString, activity.findViewById(R.id.stockCurrency_month));
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<StockSearchResult> call, Throwable t) {
+
+            }
+        });
+    }
+    private static JSONPlaceholder buildJSONPlaceholder() {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .callTimeout(30, TimeUnit.SECONDS)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+
+        return retrofit.create(JSONPlaceholder.class);
+    }
 }

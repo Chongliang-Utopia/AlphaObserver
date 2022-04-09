@@ -194,10 +194,7 @@ public class StockDetailActivity extends AppCompatActivity {
 
         // And now we have tabs that, when clicked, navigate to the correct page
     }
-    public void setStockPrice (float price) {
-        TextView textView = (TextView) findViewById(R.id.stockPrice);
-        textView.setText("$" + String.valueOf(price));
-
+    public void setProgressBarInvisible() {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
     }
