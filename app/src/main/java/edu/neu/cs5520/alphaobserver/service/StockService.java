@@ -1,8 +1,12 @@
 package edu.neu.cs5520.alphaobserver.service;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +28,8 @@ import java.util.concurrent.TimeUnit;
 
 import edu.neu.cs5520.alphaobserver.R;
 import edu.neu.cs5520.alphaobserver.activity.StockDetailActivity;
+import edu.neu.cs5520.alphaobserver.fragment.DayFragment;
+import edu.neu.cs5520.alphaobserver.fragment.IStockDetailChart;
 import edu.neu.cs5520.alphaobserver.fragment.MonthFragment;
 import edu.neu.cs5520.alphaobserver.fragment.WeekFragment;
 import edu.neu.cs5520.alphaobserver.model.JSONPlaceholder;
@@ -39,29 +45,36 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class StockService {
     private static final String SYMBOL_SEARCH = "SYMBOL_SEARCH";
     private static final String API_KEY = "42Z7B1OTYEEJQCOT";
+    private static final String API_KEY2 = "EU9W0IES2BWTFAKL";
+    private static final String API_KEY3 = "8A21BM84MW62L4C0";
     private static final String BASE_URL = "https://www.alphavantage.co/";
 
-    static List<float[]> data;
+    static List<float[]> data; // daily data.
+    static List<float[]> intraDayData; // intraDay data.
     private static final String TAG = "WebServiceActivity";
 
     private static WeekFragment weekFrag;
     private static MonthFragment monthFrag;
+    private static DayFragment dayFrag;
     private static Handler handler;
     private static StockDetailActivity activity;
 
     private static float price;
     private static String currency;
 
-    public static void setModel(WeekFragment weekFragment, MonthFragment monthFragment, Handler mainThreadHandler, StockDetailActivity stockDetailActivity) {
+    public static void setModel(WeekFragment weekFragment, MonthFragment monthFragment, DayFragment dayFragment,
+                                Handler mainThreadHandler, StockDetailActivity stockDetailActivity) {
         weekFrag = weekFragment;
         monthFrag = monthFragment;
+        dayFrag = dayFragment;
         handler = mainThreadHandler;
         activity = stockDetailActivity;
     }
 
-    public static List<float[]> getData() {
+    public static List<float[]> getDailyData() {
         return data;
     }
+    public static List<float[]> getIntraDayData() { return intraDayData; }
     public static float getPrice() {
         return price;
     }
@@ -72,39 +85,45 @@ public class StockService {
         return activity;
     }
 
-    public static void setData(final String stockSymbol)
-    {
-        fetchStockSearchResult(stockSymbol, price);
+    private static void fetchDataInNewThread(String URL, String timeSeriesKey, List<IStockDetailChart> fragments) {
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                JSONObject response = fetchStockData(getDailyURl(stockSymbol));
-                data = parseData(response);
+                JSONObject response = fetchStockData(URL);
+                Log.e(TAG, response.toString());
 
-
-                // Get currency.
-                if (data.size() > 0) {
-                    price = data.get(data.size()-1)[1];
+                List<float[]> stockData = parseData(response, timeSeriesKey);
+                if (timeSeriesKey.contains("(Daily)")) {
+                    data = stockData;
+                } else {
+                    intraDayData = stockData;
                 }
 
 
-                Log.e(TAG, String.valueOf(data));
+                // Get price
+                // .
+                if (stockData.size() > 0 && timeSeriesKey.contains("(Daily)")) {
+                    price = stockData.get(stockData.size()-1)[1];
+                    Log.e(TAG, String.valueOf(price));
+                }
+                Log.e(TAG, String.valueOf(stockData));
 
                 try {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (data.isEmpty()) {
+                            if (stockData.isEmpty()) {
                                 //Toast.makeText(MainActivity.this, "You may be requesting too often, remote API is not responding, please wait and try again...", Toast.LENGTH_LONG).show();
                             } else {
-                                //activity.setStockPrice(data.get(data.size()-1)[1]);
-                                weekFrag.setChart(data, activity);
-                                weekFrag.setPrice(String.valueOf(price), activity.findViewById(R.id.stockPrice_week));
-                                weekFrag.setPercentage(data, activity.findViewById(R.id.stockPercentage_week));
-                                monthFrag.setChart(data, activity);
-                                monthFrag.setPrice(String.valueOf(price), activity.findViewById(R.id.stockPrice_month));
-                                monthFrag.setPercentage(data, activity.findViewById(R.id.stockPercentage_month));
+                                for (IStockDetailChart fragment : fragments) {
+                                    fragment.setChart(stockData, activity);
+                                    if (timeSeriesKey.contains("(Daily)")) {
+                                        fragment.setPrice(String.valueOf(price), activity);
+                                        dayFrag.setPrice(String.valueOf(price), activity);
+                                    }
+                                    fragment.setPercentage(stockData, activity);
+                                }
 
                                 activity.setProgressBarInvisible();
                             }
@@ -117,7 +136,23 @@ public class StockService {
         }).start();
     }
 
-    static List<float[]> parseData(JSONObject response) {
+
+    public static void setData(final String stockSymbol)
+    {
+        fetchStockSearchResult(stockSymbol, price);
+
+        List<IStockDetailChart> fragments = new ArrayList<>();
+        fragments.add(dayFrag);
+        fetchDataInNewThread(getIntraDayURL(stockSymbol), "Time Series (30min)", fragments);
+
+        List<IStockDetailChart> dailyFragments = new ArrayList<>();
+        dailyFragments.add(weekFrag);
+        dailyFragments.add(monthFrag);
+        fetchDataInNewThread(getDailyURl(stockSymbol), "Time Series (Daily)", dailyFragments);
+
+    }
+
+    static List<float[]> parseData(JSONObject response, String timeSeriesKey) {
 
         //   response in the format of:
         //        Time Series (Daily):
@@ -127,7 +162,7 @@ public class StockService {
 
 
         try {
-            JSONObject timeSeries = response.getJSONObject("Time Series (Daily)");
+            JSONObject timeSeries = response.getJSONObject(timeSeriesKey);
             for (int i = 0; i < timeSeries.names().length(); i++) {
 
                 String day = timeSeries.names().getString(i);
@@ -156,7 +191,11 @@ public class StockService {
 
     static String getDailyURl(String stockSymbol) {
         return "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + stockSymbol +
-                "&apikey=8A21BM84MW62L4C0";
+                "&apikey=" + API_KEY2;
+    }
+    static String getIntraDayURL(String stockSymbol) {
+        return "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockSymbol + "&interval=30min" +
+                "&apikey=" + API_KEY3;
     }
 
     public static JSONObject fetchStockData(String URL_WEB) {
@@ -231,6 +270,7 @@ public class StockService {
                     currency = stockCurrencyString;
                     weekFrag.setCurrency(stockCurrencyString, activity.findViewById(R.id.stockCurrency_week));
                     monthFrag.setCurrency( stockCurrencyString, activity.findViewById(R.id.stockCurrency_month));
+                    dayFrag.setCurrency( stockCurrencyString, activity.findViewById(R.id.stockCurrency_day));
 
                 }
 

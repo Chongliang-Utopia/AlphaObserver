@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import edu.neu.cs5520.alphaobserver.R;
+import edu.neu.cs5520.alphaobserver.fragment.DayFragment;
 import edu.neu.cs5520.alphaobserver.fragment.MonthFragment;
 import edu.neu.cs5520.alphaobserver.model.StockCard;
 import edu.neu.cs5520.alphaobserver.model.StockReview;
@@ -50,6 +51,7 @@ public class StockDetailActivity extends AppCompatActivity {
 
     WeekFragment weekFragment = new WeekFragment();
     MonthFragment monthFragment = new MonthFragment();
+    DayFragment dayFragment = new DayFragment();
     Handler mainThreadHandler;
 
     String stockSymbol;
@@ -84,6 +86,12 @@ public class StockDetailActivity extends AppCompatActivity {
 //        StockService.setData(stockSymbol);
     }
 
+    void refresh() {
+        // Fetch data and create chart.
+        StockService.setModel(weekFragment, monthFragment, dayFragment, mainThreadHandler, this);
+        StockService.setData(stockSymbol);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +117,7 @@ public class StockDetailActivity extends AppCompatActivity {
 
 
         // Fetch data and create chart.
-        StockService.setModel(weekFragment, monthFragment, mainThreadHandler, this);
+        StockService.setModel(weekFragment, monthFragment, dayFragment, mainThreadHandler, this);
         StockService.setData(stockSymbol);
 
 
@@ -129,9 +137,10 @@ public class StockDetailActivity extends AppCompatActivity {
                     for (String key: stockSaveMap.keySet()) {
                         HashMap<String, String> map = stockSaveMap.get(key);
                         String symbol = map.get("symbol");
-                        if (symbol.equals(stockSymbol)) {
-                            stockSaveCnt++;
+                        if (!symbol.equals(stockSymbol)) {
+                            continue;
                         }
+                        stockSaveCnt++;
                         String username = map.get("username");
                         if (username.equals(currentUser)) {
                             saved = true;
@@ -164,8 +173,9 @@ public class StockDetailActivity extends AppCompatActivity {
         // Up to here, we have working scrollable pages
 
         final TabLayout tabLayout = findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Week"));
-        tabLayout.addTab(tabLayout.newTab().setText("Month"));
+        tabLayout.addTab(tabLayout.newTab().setText("1 Day"));
+        tabLayout.addTab(tabLayout.newTab().setText("1 Week"));
+        tabLayout.addTab(tabLayout.newTab().setText("1 Month"));
 
         // Now we have tabs, NOTE: I am hardcoding the order, you'll want to do something smarter
 
@@ -209,6 +219,9 @@ public class StockDetailActivity extends AppCompatActivity {
         public Fragment createFragment(int position) {
             // Hardcoded in this order, you'll want to use lists and make sure the titles match
             if (position == 0) {
+                return dayFragment;
+            }
+            else if (position == 1) {
                 return weekFragment;
             }
             return monthFragment;
@@ -217,7 +230,7 @@ public class StockDetailActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             // Hardcoded, use lists
-            return 2;
+            return 3;
         }
     }
 
@@ -237,11 +250,11 @@ public class StockDetailActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "onCancelled", error.toException());
             }
         });
     }
     private void saveStock(View view) {
+
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("StockSave").child(this.currentUser).push();
         Task t = dbRef.setValue(new StockSave(currentUser, stockSymbol));
 
@@ -269,6 +282,9 @@ public class StockDetailActivity extends AppCompatActivity {
                 break;
             case R.id.button_stock_save:
                 unSaveStock(v);
+                break;
+            case R.id.button_refresh:
+                refresh();
                 break;
             default:
                 break;

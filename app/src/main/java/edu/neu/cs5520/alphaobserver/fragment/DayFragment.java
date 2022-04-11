@@ -3,13 +3,12 @@ package edu.neu.cs5520.alphaobserver.fragment;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.LineChart;
 
@@ -26,7 +25,7 @@ import edu.neu.cs5520.alphaobserver.util.ChartUtil;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class MonthFragment extends Fragment implements IStockDetailChart {
+public class DayFragment extends Fragment implements IStockDetailChart{
 
     LineChart chart;
 
@@ -35,46 +34,46 @@ public class MonthFragment extends Fragment implements IStockDetailChart {
     private static final String INCREASE_GREEN = "#FF4CAF50";
     private static final String DECREASE_RED = "#FFF44336";
 
-    public MonthFragment() {
+    public DayFragment() {
         // Required empty public constructor
     }
 
     public void setChart(List<float[]> data, Activity activity) {
         if (activity == null) return;
-        chart = (LineChart) activity.findViewById(R.id.month_chart);
+        chart = (LineChart) activity.findViewById(R.id.day_chart);
 
         if (chart != null && data.size() > 0) {
             setChartHelper(data, chart, activity);
         }
 
-        TextView percentageView = activity.findViewById(R.id.stockPercentage_month);
+        TextView percentageView = activity.findViewById(R.id.stockPercentage_day);
         setPercentage(data, percentageView);
 
-        TextView priceView = activity.findViewById(R.id.stockPrice_month);
-        setPrice(String.valueOf(data.get(data.size()-1)[1]), priceView);
+        TextView priceView = activity.findViewById(R.id.stockPrice_day);
+        //setPrice(String.valueOf(data.get(data.size()-1)[1]), priceView);
     }
 
     @Override
     public void setPrice(String price, Activity activity) {
-        setPrice(String.valueOf(price), activity.findViewById(R.id.stockPrice_month));
+        setPrice(String.valueOf(price), activity.findViewById(R.id.stockPrice_day));
     }
 
     @Override
     public void setPercentage(List<float[]> data, Activity activity) {
-        setPercentage(data, activity.findViewById(R.id.stockPercentage_month));
+        setPercentage(data, activity.findViewById(R.id.stockPercentage_day));
     }
 
     private void setChartHelper(List<float[]> data, LineChart chart, Activity activity) {
 
         ChartUtil.setChartAxis(chart);
-        ChartUtil.setChartData(chart, data.subList(data.size()-timePeriod.getNumberOfDays(), data.size()), activity);
+        ChartUtil.setChartData(chart, data, activity);
 
     }
 
 
     public void setCurrency(String currency, TextView currencyView) {
-        if (currency == null) return;
 
+        if (currency == null) return;
         Currency stockCurrency = Currency.getInstance(currency);
         String stockCurrencySymbol = stockCurrency.getSymbol();
         if (currencyView != null)
@@ -90,8 +89,8 @@ public class MonthFragment extends Fragment implements IStockDetailChart {
 
         if (data == null || data.size() == 0) return;
 
-        float percentage = ( data.get(data.size() - 1)[1] - data.get(data.size()-timePeriod.getNumberOfDays())[1] )
-                / data.get(data.size()-timePeriod.getNumberOfDays())[1] * 100;
+        float percentage = ( data.get(data.size() - 1)[1] - data.get(0)[1] )
+                / data.get(0)[1] * 100;
 
         DecimalFormat df = new DecimalFormat("#.##");
 
@@ -109,22 +108,22 @@ public class MonthFragment extends Fragment implements IStockDetailChart {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_month, container, false);
+        View view = inflater.inflate(R.layout.fragment_day, container, false);
 
         // Call when this is not the first Tab to open, so the data is already in stockService.java.
 
-        chart = (LineChart) view.findViewById(R.id.month_chart);
-        List<float[]> data = StockService.getDailyData();
+        chart = (LineChart) view.findViewById(R.id.day_chart);
+        List<float[]> data = StockService.getIntraDayData();
 
         if (chart != null && data != null && data.size() > 0) {
             setChartHelper(data, chart, getActivity());
         }
 
-        TextView priceView = view.findViewById(R.id.stockPrice_month);
-        TextView currencyView = view.findViewById(R.id.stockCurrency_month);
+        TextView priceView = view.findViewById(R.id.stockPrice_day);
+        TextView currencyView = view.findViewById(R.id.stockCurrency_day);
         Float price = StockService.getPrice();
         String currency = StockService.getCurrency();
-        TextView percentageView = view.findViewById(R.id.stockPercentage_month);
+        TextView percentageView = view.findViewById(R.id.stockPercentage_day);
         setPercentage(data, percentageView);
 
         setCurrency( currency, currencyView);

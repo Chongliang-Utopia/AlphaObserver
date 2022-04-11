@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent= new Intent(this, StockDetailActivity.class);
         intent.putExtra("STOCK_SYMBOL", "PINS");
         intent.putExtra("STOCK_NAME", "Pinterest");
-        intent.putExtra("USER_NAME", "tcl");
+        intent.putExtra("USER_NAME", "John");
         startActivity(intent);
     }
 }

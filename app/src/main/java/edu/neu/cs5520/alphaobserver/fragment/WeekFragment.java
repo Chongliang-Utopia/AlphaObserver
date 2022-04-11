@@ -26,7 +26,7 @@ import edu.neu.cs5520.alphaobserver.util.ChartUtil;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class WeekFragment extends Fragment {
+public class WeekFragment extends Fragment implements IStockDetailChart {
 
     LineChart chart;
 
@@ -53,6 +53,17 @@ public class WeekFragment extends Fragment {
         TextView priceView = activity.findViewById(R.id.stockPrice_week);
         setPrice(String.valueOf(data.get(data.size()-1)[1]), priceView);
     }
+
+    @Override
+    public void setPrice(String price, Activity activity) {
+        setPrice(String.valueOf(price), activity.findViewById(R.id.stockPrice_week));
+    }
+
+    @Override
+    public void setPercentage(List<float[]> data, Activity activity) {
+        setPercentage(data, activity.findViewById(R.id.stockPercentage_week));
+    }
+
     private void setChartHelper(List<float[]> data, LineChart chart, Activity activity) {
 
         ChartUtil.setChartAxis(chart);
@@ -103,7 +114,7 @@ public class WeekFragment extends Fragment {
         // Call when this is not the first Tab to open, so the data is already in stockService.java.
 
         chart = (LineChart) view.findViewById(R.id.week_chart);
-        List<float[]> data = StockService.getData();
+        List<float[]> data = StockService.getDailyData();
 
         if (chart != null && data != null && data.size() > 0) {
             setChartHelper(data, chart, getActivity());
