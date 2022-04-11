@@ -20,7 +20,7 @@
             android:name=".activity.ReviewActivity"
             android:exported="false" />
         <activity
-            android:name=".stockDetail.StockDetailActivity"
+            android:name=".activity.StockDetailActivity"
             android:exported="false" />
         <activity
             android:name=".activity.UserDashboardActivity"

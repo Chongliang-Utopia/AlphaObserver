@@ -41,12 +41,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 />
 
-
             <TextView
                 android:id="@+id/stockName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stock Name"
+                android:text="Pinterest"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="24sp"
@@ -61,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="Stock Symbol"
+                android:text="PINS"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -123,50 +122,55 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttons"
-            android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_height="wrap_content">
+            android:layout_width="210dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="10dp">
 
-            <Button
-                android:id="@+id/StockReview"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_margin="20dp"
-                android:backgroundTint="@color/gray"
-                android:onClick="buttonOnClick"
-                android:text="Stock Reviews"
-                android:textAllCaps="false"
-                android:textColor="@color/purple"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:cornerRadius="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/AboutCompany"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:orientation="vertical"
+                android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/AboutCompany"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:backgroundTint="@color/purple"
-                android:onClick="buttonOnClick"
-                android:text="About Pinterest"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:cornerRadius="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:id="@+id/StockReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/gray"
+                    android:onClick="buttonOnClick"
+                    android:text="Stock Reviews"
+                    android:textAllCaps="false"
+                    android:textColor="@color/purple"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="20dp" />
+
+                <Button
+                    android:id="@+id/AboutCompany"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/purple"
+                    android:onClick="buttonOnClick"
+                    android:text="About Pinterest"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="20dp"
+                    />
+            </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -174,9 +178,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/Chart"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginRight="250dp"
             android:layout_below="@+id/title"
-            android:layout_above="@+id/buttons"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <FrameLayout
@@ -187,8 +190,9 @@
                     android:id="@+id/progressBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="60dp"
                     android:indeterminate="true" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
