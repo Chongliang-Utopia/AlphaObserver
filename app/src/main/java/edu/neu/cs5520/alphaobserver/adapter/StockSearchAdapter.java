@@ -187,7 +187,8 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) ((StockSearchHolder) holder).saveButton.setIcon(ContextCompat.getDrawable(((StockSearchHolder) holder).saveButton.getContext(), R.drawable.ic_baseline_star_24));;
+                if (snapshot.exists()) ((StockSearchHolder) holder).saveButton.setIcon(ContextCompat.getDrawable(((StockSearchHolder) holder).saveButton.getContext(), R.drawable.ic_baseline_star_24));
+                else ((StockSearchHolder) holder).saveButton.setIcon(ContextCompat.getDrawable(((StockSearchHolder) holder).saveButton.getContext(), R.drawable.ic_baseline_star_border_24));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
