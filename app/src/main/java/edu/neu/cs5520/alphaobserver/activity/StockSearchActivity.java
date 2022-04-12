@@ -38,7 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class StockSearchActivity extends AppCompatActivity {
     static final String BASE_URL = "https://www.alphavantage.co/";
-    static final String API_KEY = "42Z7B1OTYEEJQCOT";
+    static final String API_KEY = "Q5D084P5R0KIKU10";
     static final String SYMBOL_SEARCH = "SYMBOL_SEARCH";
     static final String GLOBAL_QUOTE = "GLOBAL_QUOTE";
     static final String FAIL_TO_FETCH_STOCK_INFO = "Cannot fetch stock information, try it later.";
