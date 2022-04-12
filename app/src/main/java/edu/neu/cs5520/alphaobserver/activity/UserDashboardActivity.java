@@ -64,7 +64,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     private static final String BASE_URL = "https://www.alphavantage.co/";
     private static final String SYMBOL_SEARCH = "SYMBOL_SEARCH";
     private static final String GLOBAL_QUOTE = "GLOBAL_QUOTE";
-    private static final String API_KEY = "42Z7B1OTYEEJQCOT";
+    private static final String API_KEY = "Q5D084P5R0KIKU10";
     private static final String FAIL_TO_FETCH_STOCK_INFO = "Cannot fetch stock information, try it later.";
     private static final String FAIL_TO_FETCH_STOCK_PRICE = "Cannot fetch stock price and change percent, try it later.";
 
