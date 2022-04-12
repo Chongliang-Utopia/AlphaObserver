@@ -67,6 +67,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     private static final String API_KEY = "Q5D084P5R0KIKU10";
     private static final String FAIL_TO_FETCH_STOCK_INFO = "Cannot fetch stock information, try it later.";
     private static final String FAIL_TO_FETCH_STOCK_PRICE = "Cannot fetch stock price and change percent, try it later.";
+    private static final String REFRESH_SUCCESS = "Refresh successfully!";
 
     public UserDashboardActivity() {
     }
@@ -136,6 +137,7 @@ public class UserDashboardActivity extends AppCompatActivity {
             fetchStockSearchResult(stockCard);
             fetchStockQuoteResult(stockCard);
         }
+        Toast.makeText(UserDashboardActivity.this, REFRESH_SUCCESS, Toast.LENGTH_SHORT).show();
     }
 
     private void fetchStockQuoteResult(StockCard stockCard) {
