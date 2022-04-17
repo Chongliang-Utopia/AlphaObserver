@@ -13,9 +13,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AlphaObserver">
+        <service
+            android:name=".companyInfo.CompanyInfoService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity
+            android:name=".companyInfo.CompanyDescriptionActivity"
+            android:exported="true" />
+        <activity
+            android:name=".companyInfo.CompanyInfoActivity"
+            android:exported="true" />
         <activity
             android:name=".activity.EntryActivity"
-        android:exported="false" />
+            android:exported="false" />
         <activity
             android:name=".activity.ReviewActivity"
             android:exported="false" />

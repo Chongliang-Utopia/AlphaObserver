@@ -35,6 +35,7 @@ public class StockModel {
         handler = mainThreadHandler;
     }
 
+
     public static List<float[]> getData() {
         return data;
     }
