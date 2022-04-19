@@ -268,14 +268,18 @@ public class StockDetailActivity extends AppCompatActivity {
     public void buttonOnClick(View v) {
         switch (v.getId()) {
             case R.id.StockReview:
-                Intent intent= new Intent(StockDetailActivity.this, ReviewActivity.class);
+                Intent intent = new Intent(StockDetailActivity.this, ReviewActivity.class);
                 intent.putExtra("STOCK_SYMBOL", stockSymbol);
                 intent.putExtra("STOCK_NAME", stockName);
                 intent.putExtra("USER_NAME", currentUser);
                 startActivity(intent);
                 break;
             case R.id.AboutCompany:
-
+                Intent i = new Intent(StockDetailActivity.this, CompanyInfoActivity.class);
+                i.putExtra("STOCK_SYMBOL", stockSymbol);
+                i.putExtra("STOCK_NAME", stockName);
+                i.putExtra("USER_NAME", currentUser);
+                startActivity(i);
                 break;
             case R.id.button_stock_unsave:
                 saveStock(v);
