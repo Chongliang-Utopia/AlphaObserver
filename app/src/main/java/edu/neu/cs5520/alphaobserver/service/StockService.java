@@ -44,9 +44,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class StockService {
     private static final String SYMBOL_SEARCH = "SYMBOL_SEARCH";
-    private static final String API_KEY = "42Z7B1OTYEEJQCOT";
-    private static final String API_KEY2 = "EU9W0IES2BWTFAKL";
-    private static final String API_KEY3 = "8A21BM84MW62L4C0";
+    private static final String API_KEY = "Q5D084P5R0KIKU10";
+//    private static final String API_KEY2 = "EU9W0IES2BWTFAKL";
+//    private static final String API_KEY3 = "8A21BM84MW62L4C0";
     private static final String BASE_URL = "https://www.alphavantage.co/";
 
     static List<float[]> data; // daily data.
@@ -102,7 +102,6 @@ public class StockService {
 
 
                 // Get price
-                // .
                 if (stockData.size() > 0 && timeSeriesKey.contains("(Daily)")) {
                     price = stockData.get(stockData.size()-1)[1];
                     Log.e(TAG, String.valueOf(price));
@@ -141,14 +140,14 @@ public class StockService {
     {
         fetchStockSearchResult(stockSymbol, price);
 
-        List<IStockDetailChart> fragments = new ArrayList<>();
-        fragments.add(dayFrag);
-        fetchDataInNewThread(getIntraDayURL(stockSymbol), "Time Series (30min)", fragments);
-
         List<IStockDetailChart> dailyFragments = new ArrayList<>();
         dailyFragments.add(weekFrag);
         dailyFragments.add(monthFrag);
         fetchDataInNewThread(getDailyURl(stockSymbol), "Time Series (Daily)", dailyFragments);
+
+        List<IStockDetailChart> fragments = new ArrayList<>();
+        fragments.add(dayFrag);
+        fetchDataInNewThread(getIntraDayURL(stockSymbol), "Time Series (30min)", fragments);
 
     }
 
@@ -191,11 +190,11 @@ public class StockService {
 
     static String getDailyURl(String stockSymbol) {
         return "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + stockSymbol +
-                "&apikey=" + API_KEY2;
+                "&apikey=" + API_KEY;
     }
     static String getIntraDayURL(String stockSymbol) {
         return "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockSymbol + "&interval=30min" +
-                "&apikey=" + API_KEY3;
+                "&apikey=" + API_KEY;
     }
 
     public static JSONObject fetchStockData(String URL_WEB) {

@@ -124,7 +124,6 @@ public class DayFragment extends Fragment implements IStockDetailChart{
         Float price = StockService.getPrice();
         String currency = StockService.getCurrency();
         TextView percentageView = view.findViewById(R.id.stockPercentage_day);
-        setPercentage(data, percentageView);
 
         setCurrency( currency, currencyView);
         setPrice( String.valueOf(price), priceView);
