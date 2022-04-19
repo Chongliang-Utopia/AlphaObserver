@@ -146,9 +146,10 @@
         android:text=""
         android:textAlignment="center"
         android:textAllCaps="true"
-        android:textStyle="bold"
         android:textSize="13sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/button_showMore"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/text_Description"
         app:layout_constraintTop_toBottomOf="@+id/text_Description" />
 
@@ -195,7 +196,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="350dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="100dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -206,7 +207,6 @@
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:layout_marginTop="30dp"
             android:indeterminate="true" />
 
         <androidx.viewpager2.widget.ViewPager2
@@ -225,15 +225,15 @@
 
     <Button
         android:id="@+id/button_showMore"
-        android:layout_width="136dp"
-        android:layout_height="51dp"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:backgroundTint="@color/white"
         android:text="Show More"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="10sp"
+        android:textSize="8sp"
         android:textStyle="bold"
         app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"

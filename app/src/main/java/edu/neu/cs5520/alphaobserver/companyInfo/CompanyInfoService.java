@@ -215,7 +215,7 @@ public class CompanyInfoService {
 
     static String getURl(String stockSymbol) {
         return "https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=" + stockSymbol +
-                "&apikey=3S6S2S5CY1C8NEE6";
+                "&apikey=Q5D084P5R0KIKU10";
     }
 
     public static JSONObject fetchStockData(String URL_WEB) {

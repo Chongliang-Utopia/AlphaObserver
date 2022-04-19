@@ -266,7 +266,7 @@ public class CompanyInfoActivity extends AppCompatActivity {
             String URLString;
             try{
                 //https://www.alphavantage.co/query?function=OVERVIEW&symbol=IBM&apikey=demo
-                URLString = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockSymbol + "&apikey=3S6S2S5CY1C8NEE6";
+                URLString = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockSymbol + "&apikey=Q5D084P5R0KIKU10";
                 //URLString = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=IBM&apikey=demo";
 
 
@@ -317,7 +317,8 @@ public class CompanyInfoActivity extends AppCompatActivity {
                     stringBuilder.append(len);
                 }
                 bufferedReader.close();
-                return stringBuilder.toString().replace(",", ",\n");
+                //return stringBuilder.toString().replace(",", ",\n");
+                return stringBuilder.toString();
             } catch (Exception e) {
                 e.printStackTrace();
             }
