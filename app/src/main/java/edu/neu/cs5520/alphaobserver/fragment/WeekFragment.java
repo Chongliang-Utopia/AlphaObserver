@@ -125,7 +125,6 @@ public class WeekFragment extends Fragment implements IStockDetailChart {
         Float price = StockService.getPrice();
         String currency = StockService.getCurrency();
         TextView percentageView = view.findViewById(R.id.stockPercentage_week);
-        setPercentage(data, percentageView);
 
         setCurrency( currency, currencyView);
         setPrice( String.valueOf(price), priceView);
