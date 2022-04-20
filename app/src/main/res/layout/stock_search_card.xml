@@ -12,6 +12,7 @@
         android:weightSum="5.2">
 
         <LinearLayout
+            android:id="@+id/stockSearchInfoLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"

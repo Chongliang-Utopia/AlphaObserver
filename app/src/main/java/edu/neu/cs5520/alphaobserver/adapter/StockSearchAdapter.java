@@ -2,11 +2,13 @@ package edu.neu.cs5520.alphaobserver.adapter;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,8 +28,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 
 import edu.neu.cs5520.alphaobserver.R;
+import edu.neu.cs5520.alphaobserver.activity.EntryActivity;
 import edu.neu.cs5520.alphaobserver.model.StockCard;
 import edu.neu.cs5520.alphaobserver.model.StockSave;
+import edu.neu.cs5520.alphaobserver.stockDetail.StockDetailActivity;
 
 public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final List<StockCard> stockCardList;
@@ -56,6 +60,7 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private TextView stockPrice;
         private TextView stockChangePercent;
         private MaterialButton saveButton;
+        private LinearLayout stockInfoLayout;
         private static final String INCREASE_GREEN = "#FF4CAF50";
         private static final String DECREASE_RED = "#FFF44336";
         private static final String NO_CHANGE_BLACK = "#363B46";
@@ -76,7 +81,15 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             stockChangePercent = (TextView) itemView.findViewById(R.id.stock_search_text_view_stock_change_percent);
             stockCurrency = (TextView) itemView.findViewById(R.id.stock_search_text_view_stock_currency);
             saveButton = (MaterialButton) itemView.findViewById(R.id.stock_search_button_stock_save);
-
+            stockInfoLayout = (LinearLayout) itemView.findViewById(R.id.stockSearchInfoLayout);
+            stockInfoLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(view.getContext(), EntryActivity.class);
+                    i.putExtra("STOCK_SYMBOL", stockSymbol.getText());
+                    view.getContext().startActivity(i);
+                }
+            });
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
