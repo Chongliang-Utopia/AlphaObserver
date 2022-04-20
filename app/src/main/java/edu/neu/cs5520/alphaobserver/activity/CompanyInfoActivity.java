@@ -85,9 +85,9 @@ public class CompanyInfoActivity extends AppCompatActivity {
         mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
         // TODO: Get from intent
-        //Bundle data = getIntent().getExtras();
-        //stockSymbol = data.getString("STOCK_SYMBOL");
-        stockSymbol = "IBM";
+        Bundle data = getIntent().getExtras();
+        stockSymbol = data.getString("STOCK_SYMBOL");
+        //stockSymbol = "IBM";
 
         TextView stockSymbolText = findViewById(R.id.stockSymbol);
         stockSymbolText.setText(stockSymbol);
