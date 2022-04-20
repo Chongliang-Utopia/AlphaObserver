@@ -85,8 +85,10 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             stockInfoLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(view.getContext(), EntryActivity.class);
+                    Intent i = new Intent(view.getContext(), StockDetailActivity.class);
                     i.putExtra("STOCK_SYMBOL", stockSymbol.getText());
+                    i.putExtra("STOCK_NAME", NA);
+                    i.putExtra("USER_NAME", currentUser);
                     view.getContext().startActivity(i);
                 }
             });

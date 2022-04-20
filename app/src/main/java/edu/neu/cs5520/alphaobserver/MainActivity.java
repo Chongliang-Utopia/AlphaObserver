@@ -31,6 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 //        Intent intent = new Intent(this, EntryActivity.class);
-//        startActivity(intent);
+//        startActivityibm(intent);
     }
 }
