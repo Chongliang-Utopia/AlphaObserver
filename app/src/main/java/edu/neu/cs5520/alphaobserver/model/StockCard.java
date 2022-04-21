@@ -6,16 +6,14 @@ public class StockCard {
     private String stockPrice;
     private String stockCurrency;
     private String stockChangePercent;
-    private String stockName;
 
     public StockCard(String stockSymbol, String stockType, String stockPrice, String stockCurrency,
-                     String stockChangePercent, String stockName) {
+                     String stockChangePercent) {
         this.stockSymbol = stockSymbol;
         this.stockType = stockType;
         this.stockPrice = stockPrice;
         this.stockCurrency = stockCurrency;
         this.stockChangePercent = stockChangePercent;
-        this.stockName = stockName;
     }
 
     public StockCard(String stockSymbol) {
@@ -36,14 +34,6 @@ public class StockCard {
 
     public String getStockChangePercent() {
         return stockChangePercent;
-    }
-
-    public String getStockName() {
-        return stockName;
-    }
-
-    public void setStockName(String stockName) {
-        this.stockName = stockName;
     }
 
     public void setStockChangePercent(String stockChangePercent) {
