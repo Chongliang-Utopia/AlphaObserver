@@ -88,12 +88,15 @@ public class StockSearchActivity extends AppCompatActivity {
                 }
                 StockQuoteResult stockQuoteResult = response.body();
                 StockQuoteItem quoteItem = stockQuoteResult.getQuoteItem();
-                if (quoteItem == null) {
-                    stockCardList.add(new StockCard(stockSymbol, stockType, null, stockCurrency, null));
-                } else {
-                    String stockPrice = quoteItem.getPrice();
-                    String stockChangePercent = quoteItem.getChangePercent();
-                    stockCardList.add(new StockCard(stockSymbol, stockType, stockPrice, stockCurrency, stockChangePercent));
+                if (!stockSymbol.contains(".")) {
+                    if (quoteItem == null) {
+                        stockCardList.add(new StockCard(stockSymbol, stockType, null, stockCurrency, null));
+                    } else {
+                        String stockPrice = quoteItem.getPrice();
+                        String stockChangePercent = quoteItem.getChangePercent();
+                        stockCardList.add(new StockCard(stockSymbol, stockType, stockPrice, stockCurrency, stockChangePercent));
+                    }
+
                 }
                 stockAdaptor.notifyDataSetChanged();
                 System.out.printf("Stock size: %d\n", stockCardList.size());
