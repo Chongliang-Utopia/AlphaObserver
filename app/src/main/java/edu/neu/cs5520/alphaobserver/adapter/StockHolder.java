@@ -43,7 +43,7 @@ public class StockHolder extends RecyclerView.ViewHolder {
     private static final String NA = "N/A";
     private static final String REMOVE_SAVED_STOCK_SUCCESS = "Successfully remove the saved stock!";
 
-    public StockHolder(@NonNull View itemView, String currentUser) {
+    public StockHolder(@NonNull View itemView, String currentUser, final StockClickListener stockClickListener) {
         super(itemView);
 
         this.currentUser = currentUser;
@@ -75,6 +75,17 @@ public class StockHolder extends RecyclerView.ViewHolder {
                     }
                 });
 
+            }
+        });
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (stockClickListener != null) {
+                    int position = getLayoutPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        stockClickListener.onStockClick(position);
+                    }
+                }
             }
         });
     }
