@@ -3,15 +3,20 @@ package edu.neu.cs5520.alphaobserver.activity;
 import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuView;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -19,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import edu.neu.cs5520.alphaobserver.R;
 import edu.neu.cs5520.alphaobserver.adapter.StockAdaptor;
@@ -67,6 +72,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     private int fetchedSearchResultSize;
     private int fetchedQuoteResultSize;
     private MaterialButton refreshButton;
+    private MaterialButton gpsButton;
     private static final String GOOD_MORNING = "Good morning, ";
     private static final String GOOD_AFTERNOON = "Good afternoon, ";
     private static final String GOOD_EVENING = "Good evening, ";
@@ -80,6 +86,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     private static final String FAIL_TO_FETCH_STOCK_PRICE = "Cannot fetch stock price and change percent, try it later.";
     private static final String REFRESH_SUCCESS = "Refresh successfully!";
     private static final String REMOVE_SAVED_STOCK_SUCCESS = "Successfully remove the saved stock!";
+    private static final String LOCATION_PERMISSION_REQUIRED = "Location permission is required for locator, please enable location from Settings.";
 
     public UserDashboardActivity() {
     }
@@ -92,9 +99,10 @@ public class UserDashboardActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         currentUser = data.getString(USER_NAME);
 
-        recyclerView = (RecyclerView) findViewById(R.id.user_dashboard_recycler_view);
-        loadingSpinner = (ProgressBar) findViewById(R.id.loading_spinner);
-        refreshButton = (MaterialButton) findViewById(R.id.button_refresh);
+        recyclerView = findViewById(R.id.user_dashboard_recycler_view);
+        loadingSpinner = findViewById(R.id.loading_spinner);
+        refreshButton = findViewById(R.id.button_refresh);
+        gpsButton = findViewById(R.id.button_gps);
 
         dbRef = FirebaseDatabase.getInstance().getReference().child("StockSave").child(currentUser);
         dbRef.addValueEventListener(new ValueEventListener() {
@@ -155,6 +163,47 @@ public class UserDashboardActivity extends AppCompatActivity {
             }
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        gpsButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.R)
+            @Override
+            public void onClick(View view) {
+                getLocation();
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    public void getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            locationManager.getCurrentLocation(LocationManager.GPS_PROVIDER, null, getApplication().getMainExecutor(), new Consumer<Location>() {
+                @Override
+                public void accept(Location location) {
+                    String gpsInfo = "LAT: " + String.format("%.2f", location.getLatitude()) + ", LNG: " + String.format("%.2f", location.getLongitude());
+                    Toast.makeText(UserDashboardActivity.this, gpsInfo, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            requestPermission();
+        }
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 10);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 10) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocation();
+            } else {
+                Toast.makeText(UserDashboardActivity.this, LOCATION_PERMISSION_REQUIRED, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void deleteLink(View itemView, int position) {
