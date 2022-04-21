@@ -1,22 +1,30 @@
 package edu.neu.cs5520.alphaobserver.activity;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -29,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 import edu.neu.cs5520.alphaobserver.R;
 import edu.neu.cs5520.alphaobserver.adapter.StockAdaptor;
+import edu.neu.cs5520.alphaobserver.adapter.StockClickListener;
 import edu.neu.cs5520.alphaobserver.model.JSONPlaceholder;
 import edu.neu.cs5520.alphaobserver.model.StockCard;
 import edu.neu.cs5520.alphaobserver.model.StockQuoteItem;
@@ -36,6 +45,7 @@ import edu.neu.cs5520.alphaobserver.model.StockQuoteResult;
 import edu.neu.cs5520.alphaobserver.model.StockSave;
 import edu.neu.cs5520.alphaobserver.model.StockSearchMatch;
 import edu.neu.cs5520.alphaobserver.model.StockSearchResult;
+import edu.neu.cs5520.alphaobserver.model.User;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,12 +72,14 @@ public class UserDashboardActivity extends AppCompatActivity {
     private static final String GOOD_EVENING = "Good evening, ";
     private static final String GOOD_NIGHT = "Good night, ";
     private static final String BASE_URL = "https://www.alphavantage.co/";
+    private static final String USER_NAME = "USER_NAME";
     private static final String SYMBOL_SEARCH = "SYMBOL_SEARCH";
     private static final String GLOBAL_QUOTE = "GLOBAL_QUOTE";
     private static final String API_KEY = "Q5D084P5R0KIKU10";
     private static final String FAIL_TO_FETCH_STOCK_INFO = "Cannot fetch stock information, try it later.";
     private static final String FAIL_TO_FETCH_STOCK_PRICE = "Cannot fetch stock price and change percent, try it later.";
     private static final String REFRESH_SUCCESS = "Refresh successfully!";
+    private static final String REMOVE_SAVED_STOCK_SUCCESS = "Successfully remove the saved stock!";
 
     public UserDashboardActivity() {
     }
@@ -78,7 +90,7 @@ public class UserDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_dashboard_page);
 
         Bundle data = getIntent().getExtras();
-        currentUser = data.getString("USER_NAME");
+        currentUser = data.getString(USER_NAME);
 
         recyclerView = (RecyclerView) findViewById(R.id.user_dashboard_recycler_view);
         loadingSpinner = (ProgressBar) findViewById(R.id.loading_spinner);
@@ -113,9 +125,9 @@ public class UserDashboardActivity extends AppCompatActivity {
         });
 
 //        add stocksave
-//        dbRef.push().setValue(new StockSave("linni", "IBM"));
-//        dbRef.push().setValue(new StockSave("linni", "TSCO.LON"));
-//        dbRef.push().setValue(new StockSave("linni", "SHOP.TRT"));
+        dbRef.push().setValue(new StockSave("linni", "IBM", "International Business Machines Corp"));
+        dbRef.push().setValue(new StockSave("linni", "TSCO.LON", "Tesco PLC"));
+        dbRef.push().setValue(new StockSave("linni", "SHOP.TRT", "Shopify Inc"));
 
         greeting = (TextView) findViewById(R.id.text_dashboard_greeting);
         greeting.setText(getCurrentTime() + currentUser + "!");
@@ -128,6 +140,40 @@ public class UserDashboardActivity extends AppCompatActivity {
                 fetchStock();
             }
         });
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getLayoutPosition();
+                deleteLink(viewHolder.itemView, position);
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    private void deleteLink(View itemView, int position) {
+        StockCard currentStockCard = stockCardList.get(position);
+        String currentStockSymbol = currentStockCard.getStockSymbol();
+        Query userQuery = dbRef.orderByChild("symbol").equalTo(currentStockSymbol);
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    snapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "onCancelled", error.toException());
+            }
+        });
+        Toast.makeText(itemView.getContext(), REMOVE_SAVED_STOCK_SUCCESS, Toast.LENGTH_SHORT).show();
     }
 
     private void fetchStock() {
@@ -201,10 +247,12 @@ public class UserDashboardActivity extends AppCompatActivity {
                     StockSearchMatch topMatch = stockSearchMatchList.get(0);
                     String stockType = topMatch.getType();
                     String stockCurrencyString = topMatch.getCurrency();
+                    String stockName = topMatch.getName();
                     Currency stockCurrency = Currency.getInstance(stockCurrencyString);
                     String stockCurrencySymbol = stockCurrency.getSymbol();
                     stockCard.setStockCurrency(stockCurrencySymbol);
                     stockCard.setStockType(stockType);
+                    stockCard.setStockName(stockName);
                 }
                 fetchedSearchResultSize++;
                 checkFetchStatus();
@@ -223,6 +271,25 @@ public class UserDashboardActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(true);
         stockAdaptor = new StockAdaptor(stockCardList, currentUser);
+        StockClickListener stockClickListener = new StockClickListener() {
+            @Override
+            public void onStockClick(int position) {
+                StockCard stockCard = stockCardList.get(position);
+                String stockSymbol = stockCard.getStockSymbol();
+                String stockName = stockCard.getStockName();
+                Intent intent = new Intent(UserDashboardActivity.this, StockDetailActivity.class);
+                intent.putExtra("USER_NAME", currentUser);
+                intent.putExtra("STOCK_SYMBOL", stockSymbol);
+                intent.putExtra("STOCK_NAME", stockName);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onStockDelete(int position) {
+                deleteLink(recyclerView, position);
+            }
+        };
+        stockAdaptor.setOnStockClickListener(stockClickListener);
         recyclerView.setAdapter(stockAdaptor);
         recyclerView.setLayoutManager(layoutManager);
     }
