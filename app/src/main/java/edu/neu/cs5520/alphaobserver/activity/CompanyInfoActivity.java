@@ -87,7 +87,7 @@ public class CompanyInfoActivity extends AppCompatActivity {
         // TODO: Get from intent
         Bundle data = getIntent().getExtras();
         stockSymbol = data.getString("STOCK_SYMBOL");
-        //stockSymbol = "IBM";
+        //stockSymbol = "APLE";
 
         TextView stockSymbolText = findViewById(R.id.stockSymbol);
         stockSymbolText.setText(stockSymbol);
@@ -230,7 +230,7 @@ public class CompanyInfoActivity extends AppCompatActivity {
                         currencytv.setText(currency);
                         countrytv.setText(country);
                         sectortv.setText(sector);
-                        yeartv.setText(year.substring(0,4));
+                        yeartv.setText("Until " + year.substring(0,4));
                         //revenueTTMtv.setText(revenueTTM);
                         descriptiontv.setText(description.substring(0, Math.min(95, description.length())) + " ...");
 
