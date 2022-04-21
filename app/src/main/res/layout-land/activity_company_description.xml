@@ -37,14 +37,13 @@
         android:layout_height="265dp"
         android:background="@drawable/user_dashboard_bg"
         android:fillViewport="true"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        android:padding="20dp" >
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 

@@ -232,7 +232,7 @@ public class CompanyInfoActivity extends AppCompatActivity {
                         sectortv.setText(sector);
                         yeartv.setText("Until " + year.substring(0,4));
                         //revenueTTMtv.setText(revenueTTM);
-                        descriptiontv.setText(description.substring(0, Math.min(90, description.length())) + "...");
+                        descriptiontv.setText(description.substring(0, Math.min(80, description.length())) + "...");
 
                     });
                 } else{

@@ -56,6 +56,12 @@ public class CompanyDescriptionActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         stockSymbol = data.getString("STOCK_SYMBOL");
         description = data.getString("DESCRIPTION");
+        if (description.endsWith(" (?")) {
+            description = description.substring(0, description.lastIndexOf(" (?"));
+        }
+        if (!description.endsWith(".")) {
+            description += ".";
+        }
 
         TextView stockSymbolText = findViewById(R.id.stockSymbol);
         stockSymbolText.setText(stockSymbol);
