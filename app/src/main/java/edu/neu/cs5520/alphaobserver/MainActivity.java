@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
         // Intent intent = new Intent(this, UserDashboardActivity.class);
         // intent.putExtra("USER_NAME", "linni");
         // startActivity(intent);
@@ -32,18 +33,32 @@ public class MainActivity extends AppCompatActivity {
         // intent.putExtra("STOCK_NAME", "Pinterest");
         // intent.putExtra("USER_NAME", "linni");
 
-        Intent intent= new Intent(this, StockDetailActivity.class);
+//        Intent intent= new Intent(this, StockDetailActivity.class);
+//        Intent intent = new Intent(this, UserDashboardActivity.class);
+//        intent.putExtra("USER_NAME", "linni");
+//        startActivity(intent);
+//
+//        Intent intent = new Intent(this, StockDetailActivity.class);
+//        intent.putExtra("USER_NAME", "tcl");
+//        startActivity(intent);
+
+        Intent intent= new Intent(this, UserDashboardActivity.class);
         intent.putExtra("STOCK_SYMBOL", "PINS");
-      //  intent.putExtra("STOCK_NAME", "Pinterest");
-        intent.putExtra("USER_NAME", "John");
+        intent.putExtra("STOCK_NAME", "Pinterest");
+        intent.putExtra("USER_NAME", "linni");
+
+//        Intent intent = new Intent(this, StockSearchActivity.class);
+//        intent.putExtra("USER_NAME", "tcl");
+//        startActivity(intent);
+//
+//        Intent intent = new Intent(this, EntryActivity.class);
         startActivity(intent);
-//=======
+
 //        // Intent intent = new Intent(this, StockSearchActivity.class);
 //        // intent.putExtra("USER_NAME", "tcl");
 //        // startActivity(intent);
 //
 //       Intent intent = new Intent(this, EntryActivity.class);
 //       startActivity(intent);
-//>>>>>>> main
     }
 }

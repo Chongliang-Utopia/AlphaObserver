@@ -125,9 +125,9 @@ public class UserDashboardActivity extends AppCompatActivity {
         });
 
 //        add stocksave
-        dbRef.push().setValue(new StockSave("linni", "IBM", "International Business Machines Corp"));
-        dbRef.push().setValue(new StockSave("linni", "TSCO.LON", "Tesco PLC"));
-        dbRef.push().setValue(new StockSave("linni", "SHOP.TRT", "Shopify Inc"));
+        dbRef.push().setValue(new StockSave("linni", "IBM"));
+        dbRef.push().setValue(new StockSave("linni", "TSCO.LON"));
+        dbRef.push().setValue(new StockSave("linni", "SHOP.TRT"));
 
         greeting = (TextView) findViewById(R.id.text_dashboard_greeting);
         greeting.setText(getCurrentTime() + currentUser + "!");
@@ -252,7 +252,6 @@ public class UserDashboardActivity extends AppCompatActivity {
                     String stockCurrencySymbol = stockCurrency.getSymbol();
                     stockCard.setStockCurrency(stockCurrencySymbol);
                     stockCard.setStockType(stockType);
-                    stockCard.setStockName(stockName);
                 }
                 fetchedSearchResultSize++;
                 checkFetchStatus();
@@ -276,11 +275,9 @@ public class UserDashboardActivity extends AppCompatActivity {
             public void onStockClick(int position) {
                 StockCard stockCard = stockCardList.get(position);
                 String stockSymbol = stockCard.getStockSymbol();
-                String stockName = stockCard.getStockName();
                 Intent intent = new Intent(UserDashboardActivity.this, StockDetailActivity.class);
                 intent.putExtra("USER_NAME", currentUser);
                 intent.putExtra("STOCK_SYMBOL", stockSymbol);
-                intent.putExtra("STOCK_NAME", stockName);
                 startActivity(intent);
             }
 
