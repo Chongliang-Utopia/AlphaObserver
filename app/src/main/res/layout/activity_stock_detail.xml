@@ -30,30 +30,29 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_refresh"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="48dp"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:onClick="buttonOnClick"
                 app:icon="@drawable/ic_baseline_refresh_24"
                 app:iconGravity="end"
                 app:iconSize="48dp"
-                android:onClick="buttonOnClick"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-
-
-            <TextView
-                android:id="@+id/stockName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Stock Name"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/stockName"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="Stock Name"-->
+            <!--                android:textAllCaps="true"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="24sp"-->
+            <!--                android:textStyle="bold"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
             <TextView
                 android:id="@+id/stockNSymbol"
@@ -64,10 +63,12 @@
                 android:text="Stock Symbol"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/stockName" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/saveNumber"

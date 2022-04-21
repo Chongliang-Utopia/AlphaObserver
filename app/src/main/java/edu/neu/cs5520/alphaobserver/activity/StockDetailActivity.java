@@ -55,7 +55,7 @@ public class StockDetailActivity extends AppCompatActivity {
     Handler mainThreadHandler;
 
     String stockSymbol;
-    String stockName;
+    //String stockName;
     String currentUser;
 
     int stockSaveCnt = 0;
@@ -102,15 +102,15 @@ public class StockDetailActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         currentUser = data.getString("USER_NAME");
         stockSymbol = data.getString("STOCK_SYMBOL");
-        stockName = data.getString("STOCK_NAME");
+       // stockName = data.getString("STOCK_NAME");
 
-        TextView stockNameText = findViewById(R.id.stockName);
-        stockNameText.setText(stockName);
+//        TextView stockNameText = findViewById(R.id.stockName);
+//        stockNameText.setText(stockName);
         TextView stockSymbolText = findViewById(R.id.stockNSymbol);
         stockSymbolText.setText(stockSymbol);
 
         Button aboutCompanyBtn = findViewById(R.id.AboutCompany);
-        aboutCompanyBtn.setText("About " + stockName);
+        aboutCompanyBtn.setText("About Company" );
 
         savedButton = findViewById(R.id.button_stock_save);
         unsavedButton = findViewById(R.id.button_stock_unsave);
@@ -270,14 +270,14 @@ public class StockDetailActivity extends AppCompatActivity {
             case R.id.StockReview:
                 Intent intent = new Intent(StockDetailActivity.this, ReviewActivity.class);
                 intent.putExtra("STOCK_SYMBOL", stockSymbol);
-                intent.putExtra("STOCK_NAME", stockName);
+                //intent.putExtra("STOCK_NAME", stockName);
                 intent.putExtra("USER_NAME", currentUser);
                 startActivity(intent);
                 break;
             case R.id.AboutCompany:
                 Intent i = new Intent(StockDetailActivity.this, CompanyInfoActivity.class);
                 i.putExtra("STOCK_SYMBOL", stockSymbol);
-                i.putExtra("STOCK_NAME", stockName);
+               // i.putExtra("STOCK_NAME", stockName);
                 i.putExtra("USER_NAME", currentUser);
                 startActivity(i);
                 break;

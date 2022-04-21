@@ -32,11 +32,17 @@ public class MainActivity extends AppCompatActivity {
         // intent.putExtra("STOCK_NAME", "Pinterest");
         // intent.putExtra("USER_NAME", "linni");
 
+        // Intent intent= new Intent(this, StockDetailActivity.class);
+        // intent.putExtra("STOCK_SYMBOL", "PINS");
+        // intent.putExtra("STOCK_NAME", "Pinterest");
+        // intent.putExtra("USER_NAME", "John");
+        // startActivity(intent);
+      
         // Intent intent = new Intent(this, StockSearchActivity.class);
         // intent.putExtra("USER_NAME", "tcl");
         // startActivity(intent);
 
-       Intent intent = new Intent(this, EntryActivity.class);
-       startActivity(intent);
+        Intent intent = new Intent(this, EntryActivity.class);
+        startActivity(intent);
     }
 }
