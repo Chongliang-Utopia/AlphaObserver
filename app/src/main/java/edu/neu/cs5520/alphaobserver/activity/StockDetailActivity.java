@@ -256,7 +256,7 @@ public class StockDetailActivity extends AppCompatActivity {
     private void saveStock(View view) {
 
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("StockSave").child(this.currentUser).push();
-        Task t = dbRef.setValue(new StockSave(currentUser, stockSymbol));
+        Task t = dbRef.setValue(new StockSave(currentUser, stockSymbol, stockName));
 
         if (t.isSuccessful()) {
             Toast.makeText(view.getContext(), ADD_SAVED_STOCK_SUCCESS, Toast.LENGTH_SHORT).show();

@@ -43,7 +43,7 @@ public class ReviewActivity extends AppCompatActivity implements NoticeDialogFra
     private DatabaseReference mDatabase;
     private String currentUser;
     private String stockSymbol;
-    private String stockName;
+    //private String stockName;
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -79,7 +79,7 @@ public class ReviewActivity extends AppCompatActivity implements NoticeDialogFra
         Bundle data = getIntent().getExtras();
         currentUser = data.getString("USER_NAME");
         stockSymbol = data.getString("STOCK_SYMBOL");
-        stockName = data.getString("STOCK_NAME");
+        //stockName = data.getString("STOCK_NAME");
 
         TextView stockSymbolText = findViewById(R.id.stockNSymbol);
         stockSymbolText.setText(stockSymbol);

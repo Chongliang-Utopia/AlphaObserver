@@ -14,6 +14,7 @@ import edu.neu.cs5520.alphaobserver.model.StockCard;
 
 public class StockAdaptor extends RecyclerView.Adapter<StockHolder> {
     private final List<StockCard> stockCardList;
+    private StockClickListener stockClickListener;
     private String currentUser;
 
     public StockAdaptor(List<StockCard> stockCardList, String currentUser) {
@@ -21,11 +22,15 @@ public class StockAdaptor extends RecyclerView.Adapter<StockHolder> {
         this.currentUser = currentUser;
     }
 
+    public void setOnStockClickListener(StockClickListener stockClickListener) {
+        this.stockClickListener = stockClickListener;
+    }
+
     @NonNull
     @Override
     public StockHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.stock_card, parent, false);
-        return new StockHolder(view, currentUser);
+        return new StockHolder(view, currentUser, stockClickListener);
     }
 
     @Override
