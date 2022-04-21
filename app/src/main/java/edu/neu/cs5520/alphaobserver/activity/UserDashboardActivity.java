@@ -73,6 +73,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     private int fetchedQuoteResultSize;
     private MaterialButton refreshButton;
     private MaterialButton gpsButton;
+    private MaterialButton searchButton;
     private static final String GOOD_MORNING = "Good morning, ";
     private static final String GOOD_AFTERNOON = "Good afternoon, ";
     private static final String GOOD_EVENING = "Good evening, ";
@@ -103,6 +104,7 @@ public class UserDashboardActivity extends AppCompatActivity {
         loadingSpinner = findViewById(R.id.loading_spinner);
         refreshButton = findViewById(R.id.button_refresh);
         gpsButton = findViewById(R.id.button_gps);
+        searchButton = findViewById(R.id.button_search);
 
         dbRef = FirebaseDatabase.getInstance().getReference().child("StockSave").child(currentUser);
         dbRef.addValueEventListener(new ValueEventListener() {
@@ -169,6 +171,15 @@ public class UserDashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getLocation();
+            }
+        });
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UserDashboardActivity.this, StockSearchActivity.class);
+                intent.putExtra(USER_NAME, currentUser);
+                startActivity(intent);
             }
         });
     }
