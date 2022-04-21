@@ -169,4 +169,11 @@ public class LoginActivity extends AppCompatActivity {
             loginButton.setEnabled(false);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        account.setText("");
+        password.setText("");
+    }
 }

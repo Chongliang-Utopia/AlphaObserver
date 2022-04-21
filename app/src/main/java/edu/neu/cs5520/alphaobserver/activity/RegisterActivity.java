@@ -178,4 +178,12 @@ public class RegisterActivity extends AppCompatActivity {
             registerButton.setEnabled(false);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        email.setText("");
+        username.setText("");
+        password.setText("");
+    }
 }
