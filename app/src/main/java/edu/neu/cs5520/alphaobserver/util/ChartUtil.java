@@ -1,4 +1,4 @@
-package edu.neu.cs5520.alphaobserver.stockDetail;
+package edu.neu.cs5520.alphaobserver.util;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -27,6 +27,8 @@ import edu.neu.cs5520.alphaobserver.R;
 
 public class ChartUtil {
 
+    private static final int INCREASE_GREEN = 0xFF4CAF50;
+    private static final int DECREASE_RED = 0xFFF44336;
 
     public static void setChartAxis(LineChart chart) {
         XAxis xAxis = chart.getXAxis();
@@ -34,6 +36,7 @@ public class ChartUtil {
         xAxis.setTextColor(Color.WHITE);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
+        xAxis.setEnabled(false);
 
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setTextColor(ColorTemplate.getHoloBlue());
@@ -65,13 +68,18 @@ public class ChartUtil {
         }
 
 
-        LineDataSet dataSet = new LineDataSet(entries, "Stock Price in $"); // add entries to dataset
+        LineDataSet dataSet = new LineDataSet(entries, "Stock Price"); // add entries to dataset
 
         {  // // LineChart Styling  // //
             dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
 
             // Line Color and weight
-            dataSet.setColor(0xFFB48DD2);
+            if (data.get(data.size()-1)[1] > data.get(0)[1]) {
+                dataSet.setColor(INCREASE_GREEN);
+            } else {
+                dataSet.setColor(DECREASE_RED);
+            }
+
             dataSet.setLineWidth(2f);
 
             // disable description text
@@ -103,8 +111,14 @@ public class ChartUtil {
             // set color of filled area
             if (Utils.getSDKInt() >= 18) {
                 // drawables only supported on api level 18 and above
-                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.fade_pueple);
-                dataSet.setFillDrawable(drawable);
+                if (data.get(data.size()-1)[1] > data.get(0)[1]) {
+                    Drawable drawable = ContextCompat.getDrawable(context, R.drawable.fade_green);
+                    dataSet.setFillDrawable(drawable);
+                } else {
+                    Drawable drawable = ContextCompat.getDrawable(context, R.drawable.fade_red);
+                    dataSet.setFillDrawable(drawable);
+                }
+
             } else {
                 dataSet.setFillColor(Color.BLACK);
             }

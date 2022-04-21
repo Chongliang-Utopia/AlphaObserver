@@ -31,7 +31,7 @@ import edu.neu.cs5520.alphaobserver.R;
 import edu.neu.cs5520.alphaobserver.activity.EntryActivity;
 import edu.neu.cs5520.alphaobserver.model.StockCard;
 import edu.neu.cs5520.alphaobserver.model.StockSave;
-import edu.neu.cs5520.alphaobserver.stockDetail.StockDetailActivity;
+import edu.neu.cs5520.alphaobserver.activity.StockDetailActivity;
 
 public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final List<StockCard> stockCardList;
