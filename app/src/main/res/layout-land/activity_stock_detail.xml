@@ -41,18 +41,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 />
 
-            <TextView
-                android:id="@+id/stockName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pinterest"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--            <TextView-->
+<!--                android:id="@+id/stockName"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Pinterest"-->
+<!--                android:textAllCaps="true"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="24sp"-->
+<!--                android:textStyle="bold"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
 
             <TextView
                 android:id="@+id/stockNSymbol"
@@ -63,10 +63,12 @@
                 android:text="PINS"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/stockName" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/saveNumber"
