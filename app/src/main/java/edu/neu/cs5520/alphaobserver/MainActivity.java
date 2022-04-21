@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-<<<<<<< HEAD
         // Intent intent = new Intent(this, UserDashboardActivity.class);
         // intent.putExtra("USER_NAME", "linni");
         // startActivity(intent);
