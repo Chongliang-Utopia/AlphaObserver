@@ -125,9 +125,10 @@ public class UserDashboardActivity extends AppCompatActivity {
         });
 
 //        add stocksave
-        dbRef.push().setValue(new StockSave("linni", "IBM"));
-        dbRef.push().setValue(new StockSave("linni", "TSCO.LON"));
-        dbRef.push().setValue(new StockSave("linni", "SHOP.TRT"));
+//        dbRef.push().setValue(new StockSave("linni", "IBM"));
+//        dbRef.push().setValue(new StockSave("linni", "TSCO"));
+//        dbRef.push().setValue(new StockSave("linni", "SHOP"));
+//        dbRef.push().setValue(new StockSave("linni", "APLE"));
 
         greeting = (TextView) findViewById(R.id.text_dashboard_greeting);
         greeting.setText(getCurrentTime() + currentUser + "!");
