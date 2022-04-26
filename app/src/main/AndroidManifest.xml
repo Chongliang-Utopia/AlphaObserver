@@ -20,9 +20,6 @@
             android:name=".activity.StockSearchActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.EntryActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.ReviewActivity"
             android:exported="false" />
         <activity
@@ -44,7 +41,7 @@
             android:name=".activity.CompanyDescriptionActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.EntryActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
