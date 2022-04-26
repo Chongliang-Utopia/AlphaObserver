@@ -1,12 +1,15 @@
 package edu.neu.cs5520.alphaobserver.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.os.HandlerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -63,6 +66,7 @@ public class StockSearchActivity extends AppCompatActivity {
     Button searchBtn;
     String currentUser;
     DatabaseReference dbRef;
+    Handler mainThreadHandler;
 
     private static final String TAG = "WebServiceActivity111";
 
@@ -70,6 +74,7 @@ public class StockSearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+        mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
         currentUser = intent.getStringExtra("USER_NAME");
         dbRef = FirebaseDatabase.getInstance().getReference().child("User");
         setContentView(R.layout.activity_stock_search);
@@ -103,9 +108,7 @@ public class StockSearchActivity extends AppCompatActivity {
                 StockQuoteResult stockQuoteResult = response.body();
                 StockQuoteItem quoteItem = stockQuoteResult.getQuoteItem();
 
-                JSONObject dataResponse = fetchStockData(getIntraDayURL(stockSymbol));
-
-                if (!stockSymbol.contains(".") && !checkIfDataIsEmpty(dataResponse)) {
+                if (!stockSymbol.contains(".")) {
                     if (quoteItem == null) {
                         stockCardList.add(new StockCard(stockSymbol, stockType, null, stockCurrency, null));
                     } else {
@@ -114,12 +117,8 @@ public class StockSearchActivity extends AppCompatActivity {
                         stockCardList.add(new StockCard(stockSymbol, stockType, stockPrice, stockCurrency, stockChangePercent));
                     }
                     stockAdaptor.notifyDataSetChanged();
+//                            System.out.printf("Stock size: %d\n", stockCardList.size());
                 }
-
-                stockAdaptor.notifyDataSetChanged();
-                System.out.printf("Stock size: %d\n", stockCardList.size());
-
-
 
             }
 
@@ -157,7 +156,13 @@ public class StockSearchActivity extends AppCompatActivity {
                         Currency stockCurrency = Currency.getInstance(stockCurrencyString);
                         String stockCurrencySymbol = stockCurrency.getSymbol();
 //                        System.out.println(ssm.getSymbol());
+//                        int originalSize = stockCardList.size();
                         fetchStockQuoteResult(ssm.getSymbol(), stockType, stockCurrencySymbol);
+//                        int currentSize = stockCardList.size();
+//                        if (originalSize < currentSize) {
+//                            stockAdaptor.notifyDataSetChanged();
+//                        }
+//                        Log.i("info", originalSize + "-" + currentSize);
                     }
                 }
             }
@@ -174,7 +179,7 @@ public class StockSearchActivity extends AppCompatActivity {
     private void createRecyclerView() {
         rLayoutManger = new LinearLayoutManager(this);
         recyclerView = findViewById(R.id.stockSearchResultRecyclerView);
-        stockAdaptor = new StockSearchAdapter(stockCardList, currentUser);
+        stockAdaptor = new StockSearchAdapter(stockCardList, currentUser, mainThreadHandler);
         recyclerView.setAdapter(stockAdaptor);
         recyclerView.setLayoutManager(rLayoutManger);
         recyclerView.setHasFixedSize(true);
