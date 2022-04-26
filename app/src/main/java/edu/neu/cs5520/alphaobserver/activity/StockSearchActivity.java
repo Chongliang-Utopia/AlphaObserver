@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,9 +16,19 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import edu.neu.cs5520.alphaobserver.R;
@@ -52,6 +63,8 @@ public class StockSearchActivity extends AppCompatActivity {
     Button searchBtn;
     String currentUser;
     DatabaseReference dbRef;
+
+    private static final String TAG = "WebServiceActivity111";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +102,10 @@ public class StockSearchActivity extends AppCompatActivity {
                 }
                 StockQuoteResult stockQuoteResult = response.body();
                 StockQuoteItem quoteItem = stockQuoteResult.getQuoteItem();
-                if (!stockSymbol.contains(".")) {
+
+                JSONObject dataResponse = fetchStockData(getIntraDayURL(stockSymbol));
+
+                if (!stockSymbol.contains(".") && !checkIfDataIsEmpty(dataResponse)) {
                     if (quoteItem == null) {
                         stockCardList.add(new StockCard(stockSymbol, stockType, null, stockCurrency, null));
                     } else {
@@ -99,7 +115,12 @@ public class StockSearchActivity extends AppCompatActivity {
                     }
                     stockAdaptor.notifyDataSetChanged();
                 }
-//                System.out.printf("Stock size: %d\n", stockCardList.size());
+
+                stockAdaptor.notifyDataSetChanged();
+                System.out.printf("Stock size: %d\n", stockCardList.size());
+
+
+
             }
 
             @Override
@@ -109,6 +130,8 @@ public class StockSearchActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 
     private void fetchStockSearchResult(String stockSymbol) {
@@ -172,5 +195,74 @@ public class StockSearchActivity extends AppCompatActivity {
                 .build();
 
         return retrofit.create(JSONPlaceholder.class);
+    }
+
+    static String getIntraDayURL(String stockSymbol) {
+        return "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockSymbol + "&interval=30min" +
+                "&apikey=" + API_KEY;
+    }
+
+    boolean checkIfDataIsEmpty(JSONObject response) {
+        try {
+            JSONObject res = response.getJSONObject("Meta Data");
+
+            return false;
+
+        } catch (JSONException e) {
+            return true;
+        }
+
+    }
+
+    public static JSONObject fetchStockData(String URL_WEB) {
+
+
+        URL url = null;
+        try {
+
+            url = new URL(URL_WEB);
+            //url = new URL(params[0]);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+
+            conn.connect();
+
+            // Read response.
+            InputStream inputStream = conn.getInputStream();
+            final String resp = convertStreamToString(inputStream);
+
+            JSONObject jObject = new JSONObject(resp);
+
+            Log.e(TAG,jObject.toString());
+
+            return jObject;
+
+        } catch (MalformedURLException e) {
+            Log.e(TAG,"MalformedURLException");
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            Log.e(TAG,"ProtocolException");
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e(TAG,"IOException");
+            e.printStackTrace();
+        } catch (JSONException e) {
+            Log.e(TAG,"JSONException");
+            e.printStackTrace();
+        }
+
+        return new JSONObject();
+    }
+
+    /**
+     * Helper function
+     * @param is
+     * @return
+     */
+    private static String convertStreamToString(InputStream is) {
+        Scanner s = new Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next().replace(",", ",\n") : "";
     }
 }
