@@ -35,7 +35,6 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import edu.neu.cs5520.alphaobserver.R;
-import edu.neu.cs5520.alphaobserver.adapter.StockAdaptor;
 import edu.neu.cs5520.alphaobserver.adapter.StockSearchAdapter;
 import edu.neu.cs5520.alphaobserver.model.JSONPlaceholder;
 import edu.neu.cs5520.alphaobserver.model.StockCard;
@@ -109,15 +108,35 @@ public class StockSearchActivity extends AppCompatActivity {
                 StockQuoteItem quoteItem = stockQuoteResult.getQuoteItem();
 
                 if (!stockSymbol.contains(".")) {
-                    if (quoteItem == null) {
-                        stockCardList.add(new StockCard(stockSymbol, stockType, null, stockCurrency, null));
-                    } else {
-                        String stockPrice = quoteItem.getPrice();
-                        String stockChangePercent = quoteItem.getChangePercent();
-                        stockCardList.add(new StockCard(stockSymbol, stockType, stockPrice, stockCurrency, stockChangePercent));
-                    }
-                    stockAdaptor.notifyDataSetChanged();
-//                            System.out.printf("Stock size: %d\n", stockCardList.size());
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JSONObject dataResponseForIntraDay = fetchStockData(getIntraDayURL(stockSymbol));
+                            JSONObject dataResponseForCompany = fetchStockData(getCompanyURL(stockSymbol));
+                            JSONObject dataResponseForCompanyInfo = fetchStockData(getCompanyInfoURL(stockSymbol));
+                            if (!checkIfIntraDayDataIsEmpty(dataResponseForIntraDay) &&
+                                    !checkIfCompanyDataIsEmpty(dataResponseForCompany) &&
+                                    !checkIfCompanyInfoDataIsEmpty(dataResponseForCompanyInfo)) {
+                                if (quoteItem == null) {
+                                    stockCardList.add(new StockCard(stockSymbol, stockType, null, stockCurrency, null));
+                                } else {
+                                    String stockPrice = quoteItem.getPrice();
+                                    String stockChangePercent = quoteItem.getChangePercent();
+                                    stockCardList.add(new StockCard(stockSymbol, stockType, stockPrice, stockCurrency, stockChangePercent));
+                                }
+                                try {
+                                    mainThreadHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            stockAdaptor.notifyDataSetChanged();
+                                        }
+                                    });
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }).start();
                 }
 
             }
@@ -179,7 +198,7 @@ public class StockSearchActivity extends AppCompatActivity {
     private void createRecyclerView() {
         rLayoutManger = new LinearLayoutManager(this);
         recyclerView = findViewById(R.id.stockSearchResultRecyclerView);
-        stockAdaptor = new StockSearchAdapter(stockCardList, currentUser, mainThreadHandler);
+        stockAdaptor = new StockSearchAdapter(stockCardList, currentUser);
         recyclerView.setAdapter(stockAdaptor);
         recyclerView.setLayoutManager(rLayoutManger);
         recyclerView.setHasFixedSize(true);
@@ -269,5 +288,42 @@ public class StockSearchActivity extends AppCompatActivity {
     private static String convertStreamToString(InputStream is) {
         Scanner s = new Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next().replace(",", ",\n") : "";
+    }
+
+    static String getCompanyURL(String stockSymbol) {
+        return "https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=" + stockSymbol +
+                "&apikey=" + API_KEY;
+    }
+
+    static String getCompanyInfoURL(String stockSymbol) {
+        return "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockSymbol +
+                "&apikey=" + API_KEY;
+    }
+
+    static boolean checkIfIntraDayDataIsEmpty(JSONObject response) {
+        try {
+            response.getJSONObject("Meta Data");
+            return false;
+        } catch (JSONException e) {
+            return true;
+        }
+    }
+
+    static boolean checkIfCompanyDataIsEmpty(JSONObject response) {
+        try {
+            response.getJSONArray("annualReports");
+            return false;
+        } catch (JSONException e) {
+            return true;
+        }
+    }
+
+    static boolean checkIfCompanyInfoDataIsEmpty(JSONObject response) {
+        try {
+            response.getString("AssetType");
+            return false;
+        } catch (JSONException e) {
+            return true;
+        }
     }
 }
