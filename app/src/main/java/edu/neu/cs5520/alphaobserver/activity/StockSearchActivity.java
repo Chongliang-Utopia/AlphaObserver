@@ -80,6 +80,7 @@ public class StockSearchActivity extends AppCompatActivity {
         JSONPlaceholder jsonPlaceholder = buildJSONPlaceholder();
         Call<StockQuoteResult> call = jsonPlaceholder.getStockQuoteResult(GLOBAL_QUOTE, stockSymbol, API_KEY);
         call.enqueue(new Callback<StockQuoteResult>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<StockQuoteResult> call, Response<StockQuoteResult> response) {
                 if (!response.isSuccessful()) {
@@ -96,10 +97,9 @@ public class StockSearchActivity extends AppCompatActivity {
                         String stockChangePercent = quoteItem.getChangePercent();
                         stockCardList.add(new StockCard(stockSymbol, stockType, stockPrice, stockCurrency, stockChangePercent));
                     }
-
+                    stockAdaptor.notifyDataSetChanged();
                 }
-                stockAdaptor.notifyDataSetChanged();
-                System.out.printf("Stock size: %d\n", stockCardList.size());
+//                System.out.printf("Stock size: %d\n", stockCardList.size());
             }
 
             @Override
