@@ -47,25 +47,16 @@ import edu.neu.cs5520.alphaobserver.activity.StockDetailActivity;
 
 public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final List<StockCard> stockCardList;
-    static final String API_KEY = "Q5D084P5R0KIKU10";
-//    ItemClickListener listener;
     String currentUser;
-    private static Handler mainThreadHandler;
 
     public StockSearchAdapter(List<StockCard> stockCardList) {
         this.stockCardList = stockCardList;
     }
 
-    public StockSearchAdapter(List<StockCard> stockCardList, String currentUser, Handler mainThreadHandler) {
+    public StockSearchAdapter(List<StockCard> stockCardList, String currentUser) {
         this.stockCardList = stockCardList;
         this.currentUser = currentUser;
-        this.mainThreadHandler = mainThreadHandler;
-
     }
-
-//    interface ItemClickListener {
-//        void onItemClick(String userName, String symbol);
-//    }
 
     static class StockSearchHolder extends RecyclerView.ViewHolder {
         private String currentUser;
@@ -83,7 +74,6 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private static final String NO_CHANGE_BLACK = "#363B46";
         private static final String NA = "N/A";
         private static final String REMOVE_SAVED_STOCK_SUCCESS = "Successfully remove the saved stock!";
-        private static final String EMPTY_CHART_OR_COMPANY_INFO = "The API doesn't have record for this stock, please try other stocks!";
         static final String SAVE_STOCK_SUCCESS = "Successfully save the stock!";
 
         public StockSearchHolder(@NonNull View itemView) {
@@ -103,39 +93,11 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             stockInfoLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String symbol = stockSymbol.getText().toString();
-                            JSONObject dataResponseForIntraDay = fetchStockData(getIntraDayURL(symbol));
-                            JSONObject dataResponseForCompany = fetchStockData(getCompanyURL(symbol));
-                            JSONObject dataResponseForCompanyInfo = fetchStockData(getCompanyInfoURL(symbol));
-                            if (!checkIfIntraDayDataIsEmpty(dataResponseForIntraDay) &&
-                                !checkIfCompanyDataIsEmpty(dataResponseForCompany) &&
-                                !checkIfCompanyInfoDataIsEmpty(dataResponseForCompanyInfo)) {
-                                Intent i = new Intent(view.getContext(), StockDetailActivity.class);
-                                i.putExtra("STOCK_SYMBOL", stockSymbol.getText());
-                                i.putExtra("STOCK_NAME", stockSymbol.getText());
-                                i.putExtra("USER_NAME", currentUser);
-                                view.getContext().startActivity(i);
-                            } else {
-                                try {
-                                    mainThreadHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(itemView.getContext(), EMPTY_CHART_OR_COMPANY_INFO, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    }).start();
-
-
-
-
+                    Intent i = new Intent(view.getContext(), StockDetailActivity.class);
+                    i.putExtra("STOCK_SYMBOL", stockSymbol.getText());
+                    i.putExtra("STOCK_NAME", stockSymbol.getText());
+                    i.putExtra("USER_NAME", currentUser);
+                    view.getContext().startActivity(i);
                 }
             });
             saveButton.setOnClickListener(new View.OnClickListener() {
@@ -263,90 +225,6 @@ public class StockSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemCount() {
         return stockCardList.size();
-    }
-
-    static String getIntraDayURL(String stockSymbol) {
-        return "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + stockSymbol + "&interval=30min" +
-                "&apikey=" + API_KEY;
-    }
-
-    static String getCompanyURL(String stockSymbol) {
-        return "https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=" + stockSymbol +
-                "&apikey=" + API_KEY;
-    }
-
-    static String getCompanyInfoURL(String stockSymbol) {
-        return "https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + stockSymbol +
-                "&apikey=" + API_KEY;
-    }
-
-    static boolean checkIfIntraDayDataIsEmpty(JSONObject response) {
-        try {
-            response.getJSONObject("Meta Data");
-            return false;
-        } catch (JSONException e) {
-            return true;
-        }
-    }
-
-    static boolean checkIfCompanyDataIsEmpty(JSONObject response) {
-        try {
-            response.getJSONArray("annualReports");
-            return false;
-        } catch (JSONException e) {
-            return true;
-        }
-    }
-
-    static boolean checkIfCompanyInfoDataIsEmpty(JSONObject response) {
-        try {
-            response.getString("AssetType");
-            return false;
-        } catch (JSONException e) {
-            return true;
-        }
-    }
-
-    public static JSONObject fetchStockData(String URL_WEB) {
-
-
-        URL url = null;
-        try {
-
-            url = new URL(URL_WEB);
-            //url = new URL(params[0]);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-
-            conn.connect();
-
-            // Read response.
-            InputStream inputStream = conn.getInputStream();
-            final String resp = convertStreamToString(inputStream);
-
-            JSONObject jObject = new JSONObject(resp);
-
-            Log.e(TAG,jObject.toString());
-
-            return jObject;
-
-        } catch (MalformedURLException e) {
-            Log.e(TAG,"MalformedURLException");
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            Log.e(TAG,"ProtocolException");
-            e.printStackTrace();
-        } catch (IOException e) {
-            Log.e(TAG,"IOException");
-            e.printStackTrace();
-        } catch (JSONException e) {
-            Log.e(TAG,"JSONException");
-            e.printStackTrace();
-        }
-
-        return new JSONObject();
     }
 
     /**
